@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dial QA</title>
+<style>
+  :root {
+    --bg: #0f0e1a;
+    --surface: #1a1828;
+    --surface2: #221f35;
+    --border: rgba(197,168,75,0.15);
+    --border-strong: rgba(197,168,75,0.35);
+    --gold: #C5A84B;
+    --gold-dim: rgba(197,168,75,0.5);
+    --text: #C8BFEC;
+    --text-dim: #7B6FA0;
+    --text-muted: #4a4266;
+    --pass: #2d6a4f;
+    --pass-bg: #1a3d2f;
+    --pass-text: #74c69d;
+    --fail: #7d1f1f;
+    --fail-bg: #3d0f0f;
+    --fail-text: #f4978e;
+    --partial: #7a5c1a;
+    --partial-bg: #3d2e0a;
+    --partial-text: #f4c95d;
+    --font: 'DM Mono', 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
+
+  .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg);
+    border-bottom: 0.5px solid var(--border);
+    padding: 12px 16px 0;
+  }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .logo { font-size: 20px; letter-spacing: 0.2em; color: var(--gold); font-weight: 700; }
+  .logo span { color: var(--text-dim); font-weight: 400; font-size: 13px; letter-spacing: 0.1em; margin-left: 8px; }
+
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .prog-bar { flex: 1; height: 3px; background: var(--surface2); border-radius: 2px; }
+  .prog-fill { height: 100%; border-radius: 2px; background: var(--gold); transition: width 0.4s ease; }
+  .prog-text { font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; white-space: nowrap; min-width: 80px; text-align: right; }
+
+  .version-tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+  .version-tabs::-webkit-scrollbar { display: none; }
+  .vtab {
+    padding: 8px 16px; font-size: 12px; letter-spacing: 0.1em;
+    border: none; background: none; color: var(--text-dim); cursor: pointer;
+    border-bottom: 2px solid transparent; white-space: nowrap; font-family: var(--font);
+    transition: color 0.2s;
+  }
+  .vtab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .vtab:hover:not(.active) { color: var(--text); }
+
+  .filters {
+    display: flex; gap: 6px; padding: 10px 16px;
+    overflow-x: auto; scrollbar-width: none; background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    padding: 5px 12px; border-radius: 4px; font-size: 11px; letter-spacing: 0.1em;
+    border: 0.5px solid var(--border); background: transparent; color: var(--text-dim);
+    cursor: pointer; white-space: nowrap; font-family: var(--font); transition: all 0.15s;
+  }
+  .filter-btn.active { border-color: var(--gold-dim); color: var(--gold); background: rgba(197,168,75,0.08); }
+
+  .content { flex: 1; padding: 0 0 120px; }
+
+  .section { margin: 0; }
+  .section-header {
+    padding: 14px 16px 8px;
+    font-size: 10px; letter-spacing: 0.25em; color: var(--gold-dim);
+    position: sticky; top: 109px; z-index: 10;
+    background: var(--bg);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .item {
+    border-bottom: 0.5px solid var(--border);
+    padding: 12px 16px;
+    background: var(--bg);
+    transition: background 0.15s;
+  }
+  .item.status-pass { background: rgba(45,106,79,0.06); }
+  .item.status-fail { background: rgba(125,31,31,0.06); }
+  .item.status-partial { background: rgba(122,92,26,0.06); }
+
+  .item-row { display: flex; align-items: flex-start; gap: 10px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; background: var(--text-muted); transition: background 0.2s; }
+  .dot.pass { background: var(--pass-text); }
+  .dot.fail { background: var(--fail-text); }
+  .dot.partial { background: var(--partial-text); }
+
+  .item-label { flex: 1; font-size: 13px; line-height: 1.5; color: var(--text); }
+
+  .btn-row { display: flex; gap: 5px; flex-shrink: 0; margin-top: 1px; }
+  .status-btn {
+    padding: 4px 9px; border-radius: 4px; font-size: 11px; letter-spacing: 0.05em;
+    border: 0.5px solid var(--border); background: transparent; color: var(--text-dim);
+    cursor: pointer; font-family: var(--font); transition: all 0.15s; min-width: 44px; min-height: 32px;
+  }
+  .status-btn.pass.active { background: var(--pass-bg); border-color: var(--pass); color: var(--pass-text); }
+  .status-btn.fail.active { background: var(--fail-bg); border-color: var(--fail); color: var(--fail-text); }
+  .status-btn.partial.active { background: var(--partial-bg); border-color: var(--partial); color: var(--partial-text); }
+  .status-btn:not(.active):hover { border-color: var(--border-strong); color: var(--text); }
+
+  .notes-wrap { margin-top: 8px; padding-left: 16px; }
+  .notes-input {
+    width: 100%; padding: 7px 10px; font-size: 12px; font-family: var(--font);
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: 4px; color: var(--text); resize: none; min-height: 36px;
+    transition: border-color 0.15s; line-height: 1.5;
+  }
+  .notes-input:focus { outline: none; border-color: var(--border-strong); }
+  .notes-input::placeholder { color: var(--text-muted); }
+
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: var(--surface); border-top: 0.5px solid var(--border);
+    padding: 10px 16px 20px;
+    display: flex; gap: 8px;
+  }
+  .action-btn {
+    flex: 1; padding: 12px; border-radius: 6px; font-size: 12px; letter-spacing: 0.1em;
+    border: 0.5px solid var(--border); background: transparent; color: var(--text-dim);
+    cursor: pointer; font-family: var(--font); transition: all 0.15s;
+  }
+  .action-btn:hover { border-color: var(--border-strong); color: var(--text); }
+  .action-btn.primary {
+    background: var(--gold); border-color: var(--gold); color: var(--bg);
+    font-weight: 700;
+  }
+  .action-btn.primary:hover { background: #d4b655; }
+
+  .summary-overlay {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(15,14,26,0.92); padding: 20px 16px;
+    flex-direction: column; gap: 12px;
+  }
+  .summary-overlay.show { display: flex; }
+  .summary-title { font-size: 14px; color: var(--gold); letter-spacing: 0.15em; }
+  .summary-text {
+    flex: 1; font-size: 12px; line-height: 1.7; color: var(--text);
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: 6px; padding: 12px; overflow-y: auto;
+    white-space: pre-wrap; font-family: var(--font);
+  }
+  .summary-btns { display: flex; gap: 8px; }
+  .summary-btn {
+    flex: 1; padding: 12px; border-radius: 6px; font-size: 12px; letter-spacing: 0.1em;
+    border: 0.5px solid var(--border); background: transparent; color: var(--text-dim);
+    cursor: pointer; font-family: var(--font);
+  }
+  .summary-btn.copy { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 700; }
+
+  .toast {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--bg); padding: 8px 16px;
+    border-radius: 20px; font-size: 12px; letter-spacing: 0.1em;
+    z-index: 400; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  .empty { padding: 32px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+  .sync-status {
+    font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em;
+    padding: 0 16px 8px; text-align: right;
+  }
+  .sync-status.ok { color: var(--pass-text); }
+  .sync-status.err { color: var(--fail-text); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="header-top">
+      <div class="logo">DIAL <span>QA TRACKER</span></div>
+      <div id="syncStatus" class="sync-status">connecting...</div>
+    </div>
+    <div class="progress-row">
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-text" id="progText">0 / 0</div>
+    </div>
+    <div class="version-tabs" id="versionTabs"></div>
+  </header>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" onclick="setFilter('all')">ALL</button>
+    <button class="filter-btn" onclick="setFilter('untested')">UNTESTED</button>
+    <button class="filter-btn" onclick="setFilter('fail')">FAILING</button>
+    <button class="filter-btn" onclick="setFilter('partial')">PARTIAL</button>
+    <button class="filter-btn" onclick="setFilter('pass')">PASSING</button>
+  </div>
+
+  <div class="content" id="content"></div>
+</div>
+
+<div class="bottom-bar">
+  <button class="action-btn" onclick="resetVersion()">RESET</button>
+  <button class="action-btn primary" onclick="showSummary()">COPY SUMMARY</button>
+</div>
+
+<div class="summary-overlay" id="summaryOverlay">
+  <div class="summary-title">SUMMARY — PASTE INTO CLAUDE</div>
+  <div class="summary-text" id="summaryText"></div>
+  <div class="summary-btns">
+    <button class="summary-btn" onclick="closeSummary()">CLOSE</button>
+    <button class="summary-btn copy" onclick="copySummary()">COPY</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://zuriyjnbqxiiujwpeclu.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1cml5am5icXhpaXVqd3BlY2x1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MDAxMDIsImV4cCI6MjA5NDQ3NjEwMn0.dEE1_AP34jMuqyrF5Hid1PqMlHyUwbSDbBPreIDmmLo';
+const TABLE = 'dial_qa_results';
+
+const VERSIONS = [
+  {
+    id: 'v0.2.9',
+    label: 'v0.2.9',
+    sections: [
+      {title:'BREW HISTORY', items:[
+        'Back button appears and returns to where you came from',
+        'Swipe left on brew row — snaps open, stays open, does not close on release',
+        'Tap Notes on swipe → EditBrewSheet opens with score, sliders, tags, notes editable. Save updates brew.',
+        'Tap Recipe on swipe → RecipeFormPage opens pre-filled with session data',
+        'Long press on brew row (400ms) → sheet with Edit Notes + Save as Recipe',
+        'Filter by method works correctly',
+        'Filter by score range works correctly',
+        'Filter by bean works correctly',
+        'Sort by date works correctly',
+        'Sort by score works correctly',
+        'Tapping a brew row navigates to Brew Detail',
+      ]},
+      {title:'RECIPES', items:[
+        'Tap recipe row → RecipeDetailSheet shows params + pour timeline',
+        'Swipe left → three actions snap open: Brew Now, Edit, Delete',
+        'Brew Now from swipe → goes to /log/grinder with recipe pre-selected, flows to live brew',
+        'Edit from swipe → RecipeFormPage pre-filled, saves back to same recipe',
+        'Delete from swipe → confirmation sheet, recipe removed on confirm',
+        'Long press on recipe → sheet with Brew Now / Edit Recipe / Delete Recipe',
+        'Drag handle → reorder within method group, order persists after closing and reopening',
+        'New recipe dashed rows → opens blank RecipeFormPage, not edit mode',
+        '+ button on Recipes tab → opens blank RecipeFormPage',
+      ]},
+      {title:'BEANS', items:[
+        'Swipe left on previous bag → Restore action snaps open',
+        'Tap Restore → bag moves to active, navigates to Coffees after 2s',
+        'Long press on previous bag → sheet with Restore + Open',
+        'Long press on active bean row → sheet with Log a Brew / Mark as Finished / Open',
+        'Log a Brew from long press → goes to /log/grinder with bean pre-selected',
+      ]},
+      {title:'ADD BEAN', items:[
+        'Single Origin / Blend toggle works',
+        'Blend: min 2 rows shown, can add up to 5, first 2 rows have no × button',
+        'Bag weight field triggers number keyboard on mobile',
+        'Cost field triggers number keyboard on mobile',
+        'Unit labels (g, AUD) appear to right of fields',
+      ]},
+      {title:'BREW FLOW', items:[
+        'Ad-hoc brew (no recipe) — full flow works end to end',
+        'Brew Now on a recipe — skips recipe select, goes straight to live brew',
+        'Log a Brew long press on bean — bean pre-selected in flow',
+        'Grinder confirmation shows most recently used grinder',
+        'Pour Over: brewer picker appears, selection carries through to session',
+        'AeroPress: orientation selector appears (Upright/Inverted)',
+        'X button appears on all logging screens',
+        'X during live brew shows confirmation sheet before exiting',
+        'Stripped nav visible during live brew, terracotta dot on Home tab',
+        'Switching tabs mid-brew and returning via Home resumes brew correctly',
+      ]},
+      {title:'SETTINGS', items:[
+        'Grinders panel: open, scroll, close — Settings reopens at same scroll position',
+        'Machine panel: same scroll preservation',
+        'Brewers panel: same scroll preservation',
+        'Grinders: add, set as primary, edit, delete (with confirmation)',
+        'Machine: add, edit, delete',
+        'Brewers: add, edit, delete',
+        'All three panels close back to Settings, not Home',
+        'Swipe left on grinder row → Edit + Delete',
+        'Swipe left on brewer row → Edit + Delete',
+        'Long press on grinder row → Set as Primary / Edit / Delete sheet',
+        '5× tap on version number reveals Developer section',
+        'Demo Mode toggle enables demo mode',
+      ]},
+      {title:'DEMO MODE', items:[
+        'Demo banner appears above bottom nav when active',
+        'Demo data visible across all screens (beans, recipes, brews, Dial analytics)',
+        'Exit demo via banner tap → confirmation → real data restored instantly',
+        'Exit demo via Developer toggle → same confirmation sheet',
+        'Switching back and forth multiple times — no data loss in either namespace',
+      ]},
+      {title:'RANGE PICKER', items:[
+        'Week segment works — correct date range',
+        'Month segment works — correct date range',
+        'All Time segment shows all brews ever',
+        'Custom → date range sheet opens, From and To selectable, Apply works',
+        'Range affects stats on Dial correctly',
+      ]},
+      {title:'GENERAL INTERACTION', items:[
+        'Only one swipe row open at a time — opening new row closes previous',
+        'Long press duration feels right — not too slow, not accidentally triggered',
+        'Home stat pills tap → navigates to Dial with correct view',
+      ]},
+    ]
+  }
+];
+
+let currentVersion = VERSIONS[0].id;
+let filter = 'all';
+let results = {};
+let saveTimer = null;
+
+async function sbFetch(path, opts={}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+      ...opts.headers
+    },
+    ...opts
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function ensureTable() {
+  try {
+    await sbFetch(`${TABLE}?limit=1`);
+  } catch(e) {
+    setSyncStatus('table missing — see setup', false);
+  }
+}
+
+async function loadResults() {
+  try {
+    const rows = await sbFetch(`${TABLE}?select=*`);
+    results = {};
+    (rows||[]).forEach(r => {
+      if (!results[r.version]) results[r.version] = {};
+      results[r.version][r.item_key] = { status: r.status, note: r.note };
+    });
+    setSyncStatus('synced', true);
+  } catch(e) {
+    setSyncStatus('offline — using local', false);
+    const local = localStorage.getItem('dial_qa_results');
+    if (local) results = JSON.parse(local);
+  }
+  render();
+}
+
+async function saveItem(version, key, status, note) {
+  localStorage.setItem('dial_qa_results', JSON.stringify(results));
+  try {
+    const existing = await sbFetch(`${TABLE}?version=eq.${encodeURIComponent(version)}&item_key=eq.${encodeURIComponent(key)}&select=id`);
+    if (existing && existing.length > 0) {
+      await sbFetch(`${TABLE}?version=eq.${encodeURIComponent(version)}&item_key=eq.${encodeURIComponent(key)}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status, note, updated_at: new Date().toISOString() })
+      });
+    } else {
+      await sbFetch(TABLE, {
+        method: 'POST',
+        body: JSON.stringify({ version, item_key: key, status, note, updated_at: new Date().toISOString() })
+      });
+    }
+    setSyncStatus('synced', true);
+  } catch(e) {
+    setSyncStatus('sync failed — saved locally', false);
+  }
+}
+
+function setSyncStatus(msg, ok) {
+  const el = document.getElementById('syncStatus');
+  el.textContent = msg;
+  el.className = 'sync-status ' + (ok ? 'ok' : 'err');
+}
+
+function itemKey(si, ii) { return `${si}_${ii}`; }
+
+function setStatus(si, ii, status) {
+  const k = itemKey(si, ii);
+  if (!results[currentVersion]) results[currentVersion] = {};
+  const cur = results[currentVersion][k]?.status;
+  const newStatus = cur === status ? null : status;
+  const note = results[currentVersion][k]?.note || '';
+  results[currentVersion][k] = { status: newStatus, note };
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveItem(currentVersion, k, newStatus, note), 600);
+  render();
+}
+
+function setNote(si, ii, note) {
+  const k = itemKey(si, ii);
+  if (!results[currentVersion]) results[currentVersion] = {};
+  const status = results[currentVersion][k]?.status || null;
+  results[currentVersion][k] = { status, note };
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveItem(currentVersion, k, status, note), 1000);
+}
+
+function setFilter(f) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === f.toUpperCase() || (f==='all' && b.textContent==='ALL'));
+  });
+  render();
+}
+
+function setVersion(vid) {
+  currentVersion = vid;
+  document.querySelectorAll('.vtab').forEach(t => t.classList.toggle('active', t.dataset.v === vid));
+  render();
+}
+
+function render() {
+  const ver = VERSIONS.find(v => v.id === currentVersion);
+  if (!ver) return;
+  const vr = results[currentVersion] || {};
+
+  let total = 0, tested = 0;
+  let html = '';
+
+  ver.sections.forEach((sec, si) => {
+    let secHtml = '';
+    let secCount = 0;
+
+    sec.items.forEach((item, ii) => {
+      const k = itemKey(si, ii);
+      const s = vr[k] || {};
+      const status = s.status || null;
+      total++;
+      if (status) tested++;
+
+      const show = filter === 'all' ||
+        (filter === 'untested' && !status) ||
+        (filter === status);
+      if (!show) return;
+      secCount++;
+
+      secHtml += `
+        <div class="item status-${status||'none'}">
+          <div class="item-row">
+            <div class="dot ${status||''}"></div>
+            <div class="item-label">${item}</div>
+            <div class="btn-row">
+              <button class="status-btn pass ${status==='pass'?'active':''}" onclick="setStatus(${si},${ii},'pass')">✓</button>
+              <button class="status-btn partial ${status==='partial'?'active':''}" onclick="setStatus(${si},${ii},'partial')">~</button>
+              <button class="status-btn fail ${status==='fail'?'active':''}" onclick="setStatus(${si},${ii},'fail')">✗</button>
+            </div>
+          </div>
+          <div class="notes-wrap">
+            <textarea class="notes-input" rows="1" placeholder="Notes..."
+              onchange="setNote(${si},${ii},this.value)"
+              onblur="setNote(${si},${ii},this.value)"
+            >${s.note||''}</textarea>
+          </div>
+        </div>`;
+    });
+
+    if (secCount > 0) {
+      html += `<div class="section">
+        <div class="section-header">${sec.title}</div>
+        ${secHtml}
+      </div>`;
+    }
+  });
+
+  if (!html) html = `<div class="empty">No items match this filter.</div>`;
+
+  document.getElementById('content').innerHTML = html;
+
+  const pct = total ? Math.round(tested/total*100) : 0;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progText').textContent = `${tested} / ${total} tested`;
+}
+
+function renderVersionTabs() {
+  const tabs = document.getElementById('versionTabs');
+  tabs.innerHTML = VERSIONS.map(v =>
+    `<button class="vtab ${v.id===currentVersion?'active':''}" data-v="${v.id}" onclick="setVersion('${v.id}')">${v.label}</button>`
+  ).join('');
+}
+
+function resetVersion() {
+  if (!confirm(`Reset all results for ${currentVersion}?`)) return;
+  results[currentVersion] = {};
+  localStorage.setItem('dial_qa_results', JSON.stringify(results));
+  try {
+    sbFetch(`${TABLE}?version=eq.${encodeURIComponent(currentVersion)}`, { method: 'DELETE' });
+  } catch(e) {}
+  render();
+}
+
+function showSummary() {
+  const ver = VERSIONS.find(v => v.id === currentVersion);
+  const vr = results[currentVersion] || {};
+  const lines = [`Dial QA Summary — ${currentVersion}`, ''];
+
+  let pass=0, fail=0, partial=0, untested=0;
+  let hasIssues = false;
+
+  ver.sections.forEach((sec, si) => {
+    const sLines = [];
+    sec.items.forEach((item, ii) => {
+      const s = (vr[itemKey(si,ii)]||{});
+      const status = s.status;
+      if (status === 'pass') pass++;
+      else if (status === 'fail') fail++;
+      else if (status === 'partial') partial++;
+      else untested++;
+
+      if (status === 'fail' || status === 'partial') {
+        hasIssues = true;
+        const note = s.note ? ` — ${s.note}` : '';
+        sLines.push(`  [${status.toUpperCase()}] ${item}${note}`);
+      }
+    });
+    if (sLines.length) {
+      lines.push(`${sec.title}:`);
+      lines.push(...sLines);
+      lines.push('');
+    }
+  });
+
+  if (!hasIssues) lines.push('No failures or partial passes recorded.');
+  lines.push('');
+  lines.push(`Totals: ${pass} pass · ${partial} partial · ${fail} fail · ${untested} untested`);
+
+  document.getElementById('summaryText').textContent = lines.join('\n');
+  document.getElementById('summaryOverlay').classList.add('show');
+}
+
+function closeSummary() {
+  document.getElementById('summaryOverlay').classList.remove('show');
+}
+
+function copySummary() {
+  const text = document.getElementById('summaryText').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('Copied!')).catch(() => {
+    showToast('Select and copy manually');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+renderVersionTabs();
+ensureTable().then(loadResults);
+</script>
+
+<!--
+SUPABASE SETUP — run this SQL in your Supabase project (SQL editor):
+
+create table if not exists dial_qa_results (
+  id uuid primary key default gen_random_uuid(),
+  version text not null,
+  item_key text not null,
+  status text,
+  note text default '',
+  updated_at timestamptz default now(),
+  unique(version, item_key)
+);
+
+alter table dial_qa_results enable row level security;
+create policy "Public read write" on dial_qa_results for all using (true) with check (true);
+-->
+</body>
+</html>
