@@ -171,6 +171,12 @@
   .toast.show { opacity: 1; }
 
   .empty { padding: 32px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+.notes-section { padding: 20px 16px 40px; border-top: 0.5px solid var(--border); margin-top: 8px; }
+.notes-section-title { font-size: 10px; letter-spacing: 0.25em; color: var(--gold-dim); margin-bottom: 4px; }
+.notes-hint { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+.notes-area { width: 100%; min-height: 100px; padding: 10px 12px; font-size: 13px; font-family: var(--font); background: var(--surface); border: 0.5px solid var(--border); border-radius: 6px; color: var(--text); resize: vertical; line-height: 1.6; }
+.notes-area:focus { outline: none; border-color: var(--border-strong); }
+.notes-area::placeholder { color: var(--text-muted); }
 
   .sync-status {
     font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em;
@@ -207,7 +213,7 @@
 </div>
 
 <div class="bottom-bar">
-  <button class="action-btn" onclick="resetVersion()">RESET</button>
+  <button class="action-btn reset-btn" onclick="resetVersion()">RESET TAB</button>
   <button class="action-btn primary" onclick="showSummary()">COPY SUMMARY</button>
 </div>
 
@@ -610,7 +616,19 @@ function render() {
 
   if (!html) html = `<div class="empty">No items match this filter.</div>`;
 
+  // Append additional notes section
+  html += `<div class="notes-section">
+    <div class="notes-section-title">ADDITIONAL NOTES & BUGS</div>
+    <div class="notes-hint">For anything you find that doesn't have a line item above</div>
+    <textarea id="additionalNotes" class="notes-area" placeholder="Add notes here — saves automatically and appears in your summary..." oninput="saveNotes()" onblur="saveNotes()"></textarea>
+  </div>`;
+
   document.getElementById('content').innerHTML = html;
+  
+  // Restore notes content after re-render
+  const notesKey = 'dial_qa_notes_' + currentVersion;
+  const savedNotes = localStorage.getItem(notesKey);
+  if (savedNotes) document.getElementById('additionalNotes').value = savedNotes;
 
   const pct = total ? Math.round(tested/total*100) : 0;
   document.getElementById('progFill').style.width = pct + '%';
@@ -625,12 +643,17 @@ function renderVersionTabs() {
 }
 
 function resetVersion() {
-  if (!confirm(`Reset all results for ${currentVersion}?`)) return;
+  const ver = VERSIONS.find(v => v.id === currentVersion);
+  const label = ver ? ver.label : currentVersion;
+  if (!confirm(`Reset all results for ${label} only?\n\nThis cannot be undone. Other tabs are not affected.`)) return;
   results[currentVersion] = {};
   localStorage.setItem('dial_qa_results', JSON.stringify(results));
   try {
     sbFetch(`${TABLE}?version=eq.${encodeURIComponent(currentVersion)}`, { method: 'DELETE' });
   } catch(e) {}
+  // Also clear notes for this version
+  localStorage.removeItem('dial_qa_notes_' + currentVersion);
+  document.getElementById('additionalNotes').value = '';
   render();
 }
 
