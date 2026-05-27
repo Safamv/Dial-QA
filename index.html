@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
 <meta charset="UTF-8">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA</title>
+<title>Dial QA v0.3.1</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -359,6 +359,89 @@ const VERSIONS = [
       ]},
     ]
   }
+,
+  {
+    id: 'v0.3.1',
+    label: 'v0.3.1',
+    sections: [
+      {title:'CRITICAL FIXES', items:[
+        'Ending a brew clears isBrewing — red dot gone from Home after save',
+        'Completing a brew and returning to Home does not re-enter the brew',
+        'X button exit confirmation works — brew abandoned correctly',
+        'All exit paths from logging flow clear isBrewing (X button, save, abandon)',
+      ]},
+      {title:'BEAN SELECTION IN LOGGING FLOW', items:[
+        'Selected bean is correctly recorded in session — not always first bean in list',
+        'Other Bean chip label shows "Other" only — no sub-label',
+        'Selecting Other Bean records null beanId in session',
+        'Bean selection persists through: QuickLaunch → Grinder → BrewSetup → LiveBrew → TasteNotes',
+      ]},
+      {title:'BACK BUTTON', items:[
+        'Back button navigates back from /log/bean',
+        'Back button navigates back from /log/grinder',
+        'Back button navigates back from /log/setup (Brew Setup)',
+        'Back button before timer starts on /log/brew — navigates back normally',
+        'Back button while timer is running on /log/brew — triggers exit confirmation sheet',
+        'Timer does not reset when back button triggers confirmation sheet',
+        'Back button navigates back from /log/taste',
+      ]},
+      {title:'BREW SETUP PAGE', items:[
+        'Method pill is selectable — can change method in Brew Setup',
+        'Changing method preserves dose, temp, grind values',
+        'Changing method relabels water/yield correctly',
+        'Changing method regenerates default pours for new method',
+        'Pour editor present — can add, remove, reorder pours and events',
+        'Pour editor defaults: Pour Over/AeroPress/Switch = 3 equal pours, French Press = 1 pour + plunge',
+        'Espresso shows yield field, no pour editor',
+        'Pours defined in Brew Setup appear in live brew pour stack',
+        'Parameters (dose, water, temp, grind) carry through to session and visible in brew detail',
+        'Save as Recipe toggle reveals recipe name input',
+        'Completing brew with Save as Recipe on — recipe appears in Recipes tab',
+        'Completing brew with Save as Recipe on — session links to new recipe id',
+      ]},
+      {title:'DEMO MODE', items:[
+        'Demo banner sits correctly above bottom nav — not overlapping content',
+        'Content not hidden behind demo banner when scrolling',
+        'Entering demo mode shows confirmation sheet before switching',
+        'Reset Demo Data button visible in Developer section when in demo mode',
+        'Reset Demo Data: confirmation sheet appears before resetting',
+        'Reset Demo Data: wipes demo data and reseeds fresh data',
+        'No brew sessions with future or negative dates in demo data',
+      ]},
+      {title:'BEAN DETAIL', items:[
+        'Single origin bean shows origin + process in detail page',
+        'Blend bean shows all origins as a list in detail page',
+        'Roast level, roast date, bag weight, cost all visible in detail page',
+        'Edit Bean button present and opens AddBeanSheet pre-filled',
+        'Saving edits updates bean correctly — changes visible in detail page',
+      ]},
+      {title:'BREWER IN SESSIONS', items:[
+        'Brewer brand + model visible in BrewDetailPage parameters section',
+        'Brewer shown in HistoryPage brew rows where applicable',
+        'Sessions without a brewer show nothing (no empty field)',
+      ]},
+      {title:'SETTINGS', items:[
+        'Brew Defaults section present in Settings',
+        'Default Dose row shows current default value',
+        'Tapping Default Dose opens input — can set a number',
+        'Use My Average option calculates mean dose from session history',
+        'Default dose used in AddBeanSheet cost-per-brew calculation',
+        'Default dose pre-fills Dose field in Brew Setup',
+      ]},
+      {title:'BREW HISTORY FILTERS', items:[
+        'Filter sheet has Clear All button — resets all filters',
+        'Method filter has All Methods option to deselect all methods',
+        'Filter pill shows default style when no filters active',
+      ]},
+      {title:'DUPLICATE RECIPE', items:[
+        'Swipe left on recipe row shows Duplicate action',
+        'Long press sheet includes Duplicate Recipe option',
+        'Duplicate creates copy named "[Original] Copy" with same fields',
+        'Duplicate opens in RecipeFormPage pre-filled for editing before saving',
+        'Duplicate saves as a new recipe with new id and totalBrews: 0',
+      ]},
+    ]
+  }
 ];
 
 let currentVersion = VERSIONS[0].id;
@@ -469,6 +552,7 @@ function setVersion(vid) {
   currentVersion = vid;
   document.querySelectorAll('.vtab').forEach(t => t.classList.toggle('active', t.dataset.v === vid));
   render();
+  loadNotes();
 }
 
 function render() {
@@ -583,6 +667,8 @@ function showSummary() {
 
   if (!hasIssues) lines.push('No failures or partial passes recorded.');
   lines.push('');
+  const notes = document.getElementById('additionalNotes').value.trim();
+  if (notes) { lines.push('Additional Notes:'); lines.push(notes); lines.push(''); }
   lines.push(`Totals: ${pass} pass · ${partial} partial · ${fail} fail · ${untested} untested`);
 
   document.getElementById('summaryText').textContent = lines.join('\n');
@@ -609,6 +695,19 @@ function showToast(msg) {
 
 renderVersionTabs();
 ensureTable().then(loadResults);
+
+function saveNotes() {
+  const key = 'dial_qa_notes_' + currentVersion;
+  const val = document.getElementById('additionalNotes').value;
+  localStorage.setItem(key, val);
+  try { window.storage?.set(key, val); } catch(e) {}
+}
+
+function loadNotes() {
+  const key = 'dial_qa_notes_' + currentVersion;
+  const local = localStorage.getItem(key);
+  if (local) document.getElementById('additionalNotes').value = local;
+}
 </script>
 
 <!--
