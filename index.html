@@ -317,6 +317,48 @@ const VERSIONS = [
       ]},
     ]
   }
+,
+  {
+    id: 'v0.3.0',
+    label: 'v0.3.0',
+    sections: [
+      {title:'BREW FLOW — NEW', items:[
+        'Quick Launch: bean selection appears first (before method)',
+        'Quick Launch: Other Bean option present as last chip',
+        'Selecting Other Bean and proceeding works — flow continues with null beanId',
+        'Brew Setup page appears after grinder confirm for ad-hoc brews',
+        'Brew Setup: dose and water fields required before Start Brew enables',
+        'Brew Setup: ratio calculates live from dose and water',
+        'Brew Setup: Save as Recipe toggle reveals recipe name input',
+        'Brew Setup: completing brew with Save as Recipe on — recipe appears in Recipes tab',
+        'Brew Setup: completing brew with Save as Recipe on — session links to that recipe id',
+        'Brew Now from recipe row → BeanSelectPage → grinder confirm → live brew (no Brew Setup)',
+        'Back button works from every step in the logging flow',
+        'GrinderSelectPage shows primary grinder (or MRU) as default, not just first in list',
+      ]},
+      {title:'SWIPE REGRESSION', items:[
+        'Only one swipe row open at a time — all row types (history, recipes, beans, grinders, brewers)',
+        'Action buttons tappable while row is snapped open — do not close on release',
+        'Long press fires on hold (400ms), not on pointer release',
+        'Long press does not also trigger the row tap action',
+        'Grinder delete button works (swipe and long press)',
+        'Brewer long press sheet works',
+      ]},
+      {title:'DEMO MODE FIXES', items:[
+        'Demo banner sits correctly above bottom nav, not overlapping content',
+        'Entering demo mode shows confirmation sheet before switching',
+        'Reset Demo Data button visible in Developer section when in demo mode',
+        'Reset Demo Data wipes demo data and reseeds fresh data',
+        'No brew sessions with future or negative dates in demo data',
+      ]},
+      {title:'BREW SETUP PAGE', items:[
+        'Method shown as read-only pill (not re-selectable)',
+        'Brew Setup page skipped when using a recipe (goes straight to live brew)',
+        'Parameters from Brew Setup carry through to session (dose, water, temp, grind visible in brew detail)',
+        'Brew Setup accessible via back button from live brew before starting',
+      ]},
+    ]
+  }
 ];
 
 let currentVersion = VERSIONS[0].id;
