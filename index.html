@@ -229,6 +229,18 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  (function() {
+  const PASS = 'dial2026';
+  const key = 'dial_qa_auth';
+  if (sessionStorage.getItem(key) !== PASS) {
+    const attempt = prompt('Enter password to access Dial QA:');
+    if (attempt !== PASS) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;color:#4a4266;font-size:13px;letter-spacing:0.1em;">ACCESS DENIED</div>';
+      throw new Error('Unauthorised');
+    }
+    sessionStorage.setItem(key, PASS);
+  }
+})();
 const SUPABASE_URL = 'https://zuriyjnbqxiiujwpeclu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1cml5am5icXhpaXVqd3BlY2x1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MDAxMDIsImV4cCI6MjA5NDQ3NjEwMn0.dEE1_AP34jMuqyrF5Hid1PqMlHyUwbSDbBPreIDmmLo';
 const TABLE = 'dial_qa_results';
