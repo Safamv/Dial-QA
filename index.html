@@ -5,7 +5,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA v0.3.1</title>
+<title>Dial QA v0.3.2</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -229,18 +229,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  (function() {
-  const PASS = 'dial2026';
-  const key = 'dial_qa_auth';
-  if (sessionStorage.getItem(key) !== PASS) {
-    const attempt = prompt('Enter password to access Dial QA:');
-    if (attempt !== PASS) {
-      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;color:#4a4266;font-size:13px;letter-spacing:0.1em;">ACCESS DENIED</div>';
-      throw new Error('Unauthorised');
-    }
-    sessionStorage.setItem(key, PASS);
-  }
-})();
 const SUPABASE_URL = 'https://zuriyjnbqxiiujwpeclu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1cml5am5icXhpaXVqd3BlY2x1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MDAxMDIsImV4cCI6MjA5NDQ3NjEwMn0.dEE1_AP34jMuqyrF5Hid1PqMlHyUwbSDbBPreIDmmLo';
 const TABLE = 'dial_qa_results';
@@ -460,9 +448,56 @@ const VERSIONS = [
       ]},
     ]
   }
+  ,
+  {
+    id: 'v0.3.2',
+    label: 'v0.3.2',
+    sections: [
+      {title:'BREW PARAMETERS', items:[
+        'Water value entered in Brew Setup is visible in Brew Detail after saving',
+        'Temperature value entered in Brew Setup is visible in Brew Detail after saving',
+        'Grind setting entered in Brew Setup is visible in Brew Detail after saving',
+        'Dose value entered in Brew Setup is visible in Brew Detail after saving',
+        'All four parameters visible in Brew History row or detail for the session',
+      ]},
+      {title:'POURS & EVENTS', items:[
+        'Pours logged during LiveBrewPage appear in Brew Detail',
+        'Pour timestamps and amounts are correct in Brew Detail',
+        'Ending brew mid-pour — that pour closes at the End Brew timestamp',
+        'Pours not yet started show in Brew Detail marked as uncompleted (not silently dropped)',
+        'Pours defined in Brew Setup appear in the live brew pour stack',
+      ]},
+      {title:'POUR VOLUME MISMATCH WARNING', items:[
+        'Starting a brew where pour total ≠ setup water volume shows a warning popup',
+        'Warning popup offers: Continue anyway / Go back / Update brew volume to pour total',
+        'Update option shows the calculated volume and new ratio in the button label',
+        'Choosing Update brew volume saves the corrected waterMl to the session',
+        'Choosing Continue anyway proceeds with the setup water volume unchanged',
+        'No warning shown when pour total matches setup water volume exactly',
+      ]},
+      {title:'DEMO MODE LOGGING', items:[
+        'Long-press a bean on Home in demo mode → Log a Brew → select method → no blank screen',
+        'Bean Detail → Brew Now in demo mode → select method → no blank screen',
+        'Full logging flow completes in demo mode — session saves correctly',
+        'Demo mode bean is correctly recorded in the saved session (not null or wrong bean)',
+      ]},
+      {title:'X BUTTON BEHAVIOUR', items:[
+        'X button before timer starts in LiveBrewPage — exits to Home, no confirmation sheet',
+        'X button in Brew Setup page — exits flow entirely to Home (not just back)',
+        'X button after timer starts — shows exit confirmation sheet as before',
+        'Abandoning via X confirmation correctly clears isBrewing',
+      ]},
+      {title:'BACK FROM TASTE NOTES', items:[
+        'Back from TasteNotesPage returns to LiveBrewPage — brew not lost',
+        'LiveBrewPage shows correct finished timer state after returning from taste notes',
+        'All brew data (pours, parameters) still intact after back from taste notes',
+        'Proceeding from LiveBrewPage back to TasteNotesPage and saving works correctly',
+      ]},
+    ]
+  }
 ];
 
-let currentVersion = VERSIONS[0].id;
+let currentVersion = 'v0.3.2';
 let filter = 'all';
 let results = {};
 let saveTimer = null;
