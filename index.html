@@ -5,7 +5,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA v0.4.3</title>
+<title>Dial QA v0.4.8</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -497,80 +497,93 @@ const VERSIONS = [
   }
   ,
   {
-    id: 'v0.4.3',
-    label: 'v0.4.3',
+    id: 'v0.4.8',
+    label: 'v0.4.8',
     sections: [
-      {title:'METHOD GRID — SCREEN 1', items:[
-        'Method grid renders with all 6 tiles (Pour Over, Espresso, Hario Switch, AeroPress, French Press, All Devices)',
-        'Each tile shows correct recipe count from live data',
-        'Empty tiles (no recipes) appear at reduced opacity with "No recipes" label',
-        'Tapping an empty tile goes to New Recipe form with that method pre-selected',
-        'Pour Over tile shows "N devices ›" badge with correct device count',
-        'Tapping Pour Over navigates to Screen 2 (device sub-grid)',
-        'Tapping any other filled tile navigates to Screen 3 (recipe list)',
-        'All Devices tile shows total Pour Over recipe count and navigates to Screen 3',
-        'Long press on a tile shows action sheet with New Recipe and View Recipes',
-        'View Recipes hidden/disabled on long press when tile is empty',
-        '+ button opens method picker then navigates to New Recipe form',
+      {title:'RECIPE ROW CALIBRATION (v0.4.7)', items:[
+        'Recipe list rows have Indigo Surface background — not transparent',
+        'Row border: subtle bottom border only, no top/side borders',
+        'Brew Now zone visible on right of each row — 88px, Gold tint background',
+        'Brew Now zone press state: background lifts on tap',
+        'Tapping left content zone of a row navigates to recipe detail',
+        'Tapping Brew Now zone starts brew flow with that recipe pre-selected',
+        'Swipe left reveals Edit (Indigo Mid) and Delete (Terracotta) only — not Brew Now',
+        'Long press sheet shows: Brew Now, Edit, Duplicate, Delete',
+        'Featured (rank 1) row still has Gold stripe, BEST badge, white name',
       ]},
-      {title:'DEVICE SUB-GRID — SCREEN 2', items:[
-        'Screen 2 shows All Devices row at top plus owned brewer tiles',
-        'All Devices row shows total Pour Over recipe count',
-        'Tapping All Devices row shows all Pour Over recipes in Screen 3',
-        'Device tiles show correct per-brewer recipe counts',
-        'Empty device tile taps to New Recipe with device pre-selected',
-        'Breadcrumb shows "Recipes › Pour Over" with Recipes tappable',
-        'Tapping Recipes in breadcrumb returns to Screen 1',
+      {title:'SAVE CONFIRMATION TOASTS (v0.4.7)', items:[
+        'Saving a brew shows "Brew saved ✓" toast before navigating away',
+        'Adding a bean shows "Bean added ✓" toast before dismissing sheet',
+        'Saving a recipe shows "Recipe saved ✓" toast before navigating away',
+        'Toast appears centred horizontally, above bottom nav',
+        'Toast visible for ~1200ms then fades out over 300ms',
+        'Navigation happens after fade completes',
+        'Tapping during toast navigates immediately',
       ]},
-      {title:'RECIPE LIST — SCREEN 3', items:[
-        'Recipe list shows correct recipes for selected method/device',
-        'Recipes sorted by avg score descending by default',
-        'Rank 1 row has featured treatment (Gold stripe, BEST badge, Indigo Mid bg)',
-        'Variable pills show dose, water, brew time correctly',
-        'Meta row shows last brewed and brewed count',
-        'Score column shows correct colour (Gold ≥8.5, Violet 6-8.4, Purple <6)',
-        'Breadcrumb shows correct path (e.g. Recipes › Pour Over › V60)',
-        'Tapping a parent breadcrumb item navigates back correctly',
-        '+ New Recipe row always appears last in the list',
-        'Swipe left reveals Brew Now and Edit actions',
-        'Brew Now on a recipe starts the logging flow with that recipe pre-selected',
-        'Tapping Edit navigates to RecipeFormPage pre-filled',
-        'Long press adds Duplicate and Delete to action sheet',
-        'Sort and Filter pills visible (UI-only — tapping does not need to do anything yet)',
+      {title:'HOME SCREEN ADDITIONS (v0.4.7)', items:[
+        'Recent Brew Notes button appears below Active Bags when brew exists within 7 days',
+        'Button shows "Add Notes" when brew has no tasting data',
+        'Button shows "Update Notes" when brew already has notes or score',
+        'Button shows bean name, method + device, and time elapsed correctly',
+        'Time elapsed format correct: Xm ago / Xh ago / Yesterday / Xd ago',
+        'Tapping button opens TasteNotesPage pre-populated with existing brew data',
+        'Saving from TasteNotesPage shows "Notes updated ✓" toast then returns to Home',
+        'Button hidden when no brews exist in last 7 days',
+        'Recent Recipes strip appears below Recent Brew Notes button',
+        'Recent Recipes shows up to 3 cards sorted by most recently brewed',
+        'Recipe cards show method icon, recipe name, last brewed time',
+        'Tapping a recipe card starts brew flow with that recipe pre-selected',
+        'Long press on recipe card shows "View Recipe" and "Start Brew" sheet',
+        'Recent Recipes strip hidden when no recipes have been brewed',
+        'Range Picker now appears below the stats strip, not above Active Bags',
       ]},
-      {title:'TRANSITIONS & NAVIGATION', items:[
-        'Drill-down transition: slide animation feels smooth at 320ms',
-        'Back transition: reverses correctly at all levels',
-        'Back button appears on Screens 2 and 3, hidden on Screen 1',
-        'Bottom nav remains visible and functional at all three levels',
-        'Returning from a recipe detail lands on the correct recipe list',
-        'After creating a new recipe, lands on the correct method list',
+      {title:'iOS FEEL — CSS POLISH (v0.4.7)', items:[
+        'Tapping any button shows immediate press feedback (opacity dims on contact)',
+        'Bottom nav tabs show press feedback on tap',
+        'Segmented control pills show press feedback on tap',
+        'No iOS viewport zoom when tapping any text input field',
+        'Scrolling a bottom sheet to its end does not rubber-band the page behind it',
+        'Active Bags strip snaps to cards when scrolled horizontally',
+        'Recent Recipes strip snaps to cards when scrolled horizontally',
       ]},
-      {title:'RECIPE DETAIL PAGE (/recipes/:id)', items:[
-        'Tapping a recipe row navigates to /recipes/:id',
-        'Recipe detail shows all parameters (dose, water, ratio, temp, grind, target time)',
-        'Edit button navigates to RecipeFormPage pre-filled',
-        'Brew Now button starts logging flow with recipe pre-selected',
-        'Brew history section shows sessions that used this recipe',
-        'Brew history rows sorted newest first with scores visible',
-        'Tapping a history row navigates to BrewDetailPage for that session',
-        'Invalid recipe ID redirects to /recipes gracefully',
+      {title:'SCREEN TRANSITIONS (v0.4.8)', items:[
+        'Navigating to Bean Detail slides in from the right (push)',
+        'Tapping back from Bean Detail slides back (pop)',
+        'Navigating to Brew Detail from History slides in from right',
+        'Tapping back from Brew Detail slides back',
+        'Settings panels slide in and out correctly',
+        'Equipment panels (Grinders, Machine, Brewers) slide in and out',
+        'Logging flow steps push forward (Grinder → Setup → Live Brew → Taste Notes)',
+        'Tapping back in logging flow pops correctly',
+        'Tab switches (Home, Coffees, Recipes, Dial, History) have NO transition — instant',
+        'Transitions feel smooth at 320ms on real device',
+        'prefers-reduced-motion: transitions fade instead of slide when Reduce Motion enabled in iOS Settings',
+        'Live brew timer keeps ticking correctly through any navigation',
+        'Back from Taste Notes still restores brew state correctly (elapsed, pours, data)',
       ]},
-      {title:'BREW DETAIL DEEP-LINK', items:[
-        'Recipe reference row in BrewDetailPage navigates to /recipes/:id (not just /recipes)',
-        'Correct recipe detail page loads from the brew detail link',
+      {title:'KEYBOARD AVOIDANCE (v0.4.8)', items:[
+        'Taste Notes — Save Brew bar slides up when keyboard appears over notes field',
+        'Taste Notes — Save Brew bar returns to bottom when keyboard dismisses',
+        'Brew Setup — Start Brew bar slides up when recipe name field is focused',
+        'Brew Setup — Start Brew bar returns to bottom when keyboard dismisses',
+        'Bottom nav does NOT move when keyboard appears',
+        'MiniBrewBar does NOT move when keyboard appears',
+        'Sheets (Add Bean, Edit Brew) scroll to show focused input — bar does not translate',
       ]},
-      {title:'DEMO MODE', items:[
-        'Method grid shows correct counts from demo recipe data',
-        'Full drill-down flow works in demo mode',
-        'Recipe detail page works in demo mode',
-        'Brew Now from recipe works in demo mode',
+      {title:'REGRESSION — CORE LOOP', items:[
+        'Full brew logging flow completes correctly end to end',
+        'Brew parameters (dose, water, temp, grind) save to session',
+        'Pours appear in brew detail after logging',
+        'Demo mode logging works from both entry points',
+        'Recipes drill-down still works (all three screens, breadcrumbs, transitions)',
+        'MiniBrewBar appears when navigating away from live brew',
+        'MiniBrewBar tap returns to live brew correctly',
       ]},
     ]
   }
 ];
 
-let currentVersion = 'v0.4.3';
+let currentVersion = 'v0.4.8';
 let filter = 'all';
 let results = {};
 let saveTimer = null;
