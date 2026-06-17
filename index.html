@@ -5,7 +5,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA v0.6.4</title>
+<title>Dial QA v0.7.9</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -887,9 +887,166 @@ const VERSIONS = [
       ]},
     ]
   }
+
+,
+  {
+    id: 'v0.7.9',
+    label: 'v0.7.9',
+    sections: [
+      {title:'CORE LOOP REGRESSION', items:[
+        'Full end-to-end: [+] → Full Setup → Live Brew → End Brew → Rating → Save → appears in Sessions History',
+        'New brew shows bean name + recipe name in Sessions History row (recipe brew)',
+        'New brew shows bean name only in Sessions History row (ad hoc brew)',
+        'New brew: "Before the brew" card visible in Brew Detail if notes were entered in Full Setup',
+        'New brew: parameters (dose, water, temp, grind) visible in Brew Detail',
+        'New brew: grinder name shown in Brew Detail equipment snapshot',
+        'Streak increments after a new-flow brew is saved',
+        'Demo mode still accessible (5 taps on Settings version row)',
+        'No screens with old design visible anywhere in the app',
+      ]},
+      {title:'FULL SETUP', items:[
+        'Brew from recipe: Full Setup pre-fills with recipe values (dose, water, temp, grind, pours)',
+        'Brew from recipe: Cancel returns to recipe detail (not Home)',
+        'Method selector: all 6 methods selectable',
+        'Pours stepper: can add and remove pours',
+        '"Split equally" distributes water evenly across all pours',
+        'Bidirectional ratio lock: editing dose updates water field live; editing water updates dose field live',
+        'Bloom label absent: pours labelled Pour 1, Pour 2, Pour 3 (no "Bloom" anywhere)',
+        'Grinder selector: can select grinder, selection persists into session',
+        'Grind setting field editable',
+        'Notes field editable (pre-brew notes / Before the brew)',
+        'Water temp field editable',
+      ]},
+      {title:'LIVE BREW', items:[
+        'Correction stepper applies to current pour only — does not affect amounts of future pours',
+        'Pour Editor: opening and closing returns to same brew state (no state loss)',
+        'Last pour card fully visible — not clipped behind nav bar',
+        'Mid-brew sheet: "Resume →" returns correctly to live brew',
+      ]},
+      {title:'RATING FLOW', items:[
+        'Score bands correct: Redial 0.0–4.0, Dialing 2.0–9.0, Dialed 6.0–10.0 (bands overlap)',
+        'Dialed: score cannot go below 6.0; Dialing: score stays between 2.0 and 9.0; Redial: score stays 0.0–4.0',
+        'Back-to-decision Path A: back button from chip/slider steps returns to decision, chip state preserved',
+        'Back-to-decision Path B: decision chip-pill visible in chip step, tapping opens decision re-selection sheet',
+        'Chip tooltip: tap-and-hold shows definition, dismisses on tap elsewhere (not on pointer release)',
+        'Shuffle animation: new chips spring in with bounce — no flicker or jump',
+        'Per-option explanations show on all scored question types after answering',
+        'Rate later: saves brew and returns to Home; "Awaiting rating" card appears on Home',
+      ]},
+      {title:'SESSIONS HISTORY', items:[
+        'Brews from yesterday show yesterday's date — not today's date',
+        'Sort sheet opens anchored near the sort button (not as a full bottom sheet)',
+        'Sort direction toggle present: ascending / descending, works correctly',
+        '"Awaiting rating" badge and "Rate now →" button visible on all unrated brews including pre-redesign demo brews',
+        'Recipe brew rows: bean name + recipe name both visible',
+        'Ad hoc brew rows: bean name only (no recipe name, no empty space)',
+        'History row tap navigates to Brew Detail',
+      ]},
+      {title:'BREW DETAIL', items:[
+        'Parameters section header reads "Parameters" (not "As executed")',
+        '"✏ Edit rating" label right-aligned on same row as score number, 44px touch target',
+        '"✏ Edit" label right-aligned on Parameters section header row',
+        'Kebab menu has exactly 4 items: Edit brew · Edit rating · Create recipe · Delete',
+        '"Awaiting rating" badge + "Rate now →" button visible for unrated brews',
+        '"Rate now →" and "Edit rating" both re-enter rating flow and update the existing brew (no duplicate session)',
+        'Rating re-entry: existing decision, chips, and slider values pre-filled on all four steps',
+        'Chips summary visible as read-only state-coloured pills for rated brews',
+        'Intent card correct per decision; Dialing/Redial intent text is inline-editable',
+        '"Before the brew" card visible when prebrewNotes were set; absent when not',
+        '"Create recipe" from kebab: navigates to RecipeFormPage pre-filled with brew parameters',
+        '"Save as recipe →" on Dialed brew Intent Card: navigates to RecipeFormPage pre-filled',
+        'Pre-filled RecipeFormPage: method, dose, water/yield, temp, grind setting, pour count all populated',
+        'Delete: kebab → confirmation sheet → session deleted → navigate back to History',
+      ]},
+      {title:'EDIT BREW', items:[
+        'Edit brew opens from "✏ Edit" Parameters header shortcut',
+        'Edit brew opens from "Edit brew" kebab item',
+        'Breadcrumb shows: Sessions → Brew Detail → Edit Brew',
+        'Equipment section: bean picker works, selection saved',
+        'Equipment section: recipe picker works, selection saved; method auto-updates from new recipe',
+        'Equipment section: grinder picker works, selection saved',
+        'Parameters: grind setting, dose, water/yield, temp all editable and saved',
+        'Water label shows "Water" for filter brews, "Yield" for espresso',
+        'Timing: date + time picker works, value saved',
+        'Timing: brew time mm:ss input works, value saved',
+        'Pours section visible for filter brews',
+        'Pours section hidden for espresso brews',
+        '"Edit pours →" opens pour overlay',
+        'Pour overlay: each pour row shows elapsed time and amount, both editable',
+        'Pour overlay: add pour row works',
+        'Pour overlay: delete pour row works',
+        'Pour overlay: total updates as amounts change',
+        'Pour overlay: edited start time does not produce inverted time range in Brew Detail',
+        'Pour overlay: "Done" returns to Edit brew with changes held in local state',
+        'Notes: pre-brew notes ("Before the brew") editable',
+        'Notes: tasting notes editable',
+        'Method not shown as an editable field',
+        '"Save changes" persists all changes, shows "Brew updated" toast, navigates to Brew Detail',
+        '"Cancel" discards all changes silently, navigates back',
+        'Back button with unsaved changes: "Discard changes?" dialog appears',
+        '"Discard" in dialog: navigates back and discards changes',
+        '"Keep editing" in dialog: dismisses dialog, stays on Edit brew',
+        'OS/browser back gesture from Edit brew with unsaved changes (note behaviour — does not need to show dialog)',
+      ]},
+      {title:'LEARNING TAB', items:[
+        'Multiple choice answers randomised — correct answer not always first option',
+        'True/False questions: True always appears above False (never shuffled)',
+        'Streak resets at midnight local time — "Today done" clears the next morning',
+        'L3: exit button (X) top-right navigates to L2 module list (not L1)',
+        'L3: back button steps to previous question',
+        'L3: previously answered questions render in submitted state (correct/wrong shown)',
+        'L3: previously answered questions cannot be re-answered',
+        'L3: "Next →" in track colour for correct answers',
+        'L3: "Got it →" neutral for wrong answers',
+        'L3: "Finish" in track colour on last question when correct',
+        'L3: "Back to learning home" label on all back navigation in Learning',
+        'Lore format: paginated one paragraph per screen; Complete always visible',
+        'Lore: reflection question on final page; tapping a perspective reveals the response',
+        'Correct answer card: sheen sweep animation visible (all 4 tracks)',
+        'Correct answer card: border 1px at 0.6 opacity in track colour',
+        'Next/Finish CTA: sheen animation visible at same time as card sheen (correct answers)',
+        'Wrong answer: no sheen on card or CTA',
+        'Reduced motion (accessibility): sheen animations suppressed, colour and border changes still apply',
+        'Per-option explanations show on scored questions after selecting an answer',
+        'Module completion: "Keep going →" navigates to L2',
+        'Completing an exercise updates streak protection ("Today done ✓" on Home + L1)',
+      ]},
+      {title:'EQUIPMENT', items:[
+        'Add Brewer: Shape segmented control present (Conical / Flat bottom / Zero bypass / None)',
+        'Add Brewer: selecting Shape and saving persists value',
+        'Edit Brewer: Shape field shows saved value, can be changed and saved',
+        'Brewer Equipment Detail: Shape value shown when set (Conical, Flat bottom, or Zero bypass)',
+        'Brewer Equipment Detail: nothing shown for Shape when None or not set',
+        'Old brewers added before v0.7.7: display correctly with no Shape shown or legacy type shown',
+      ]},
+      {title:'SETTINGS', items:[
+        'Settings sheet handle stays visible and sticky while sheet content scrolls',
+        'Low bag alert stepper increments by 1 (not 2)',
+        'Settings reset confirmation sheet overlays correctly over content (not at top of page)',
+        'Demo mode confirmation sheet overlays correctly',
+        'App version shows v0.7.9',
+      ]},
+      {title:'SYSTEMIC LAYOUT', items:[
+        'Back button not covered by any element on any screen (header content, hero, safe area)',
+        'Header height consistent across all tabs and inner screens',
+        'No iOS keyboard zoom on any text input anywhere in the app (tap any field, keyboard appears without page zoom)',
+        'Nav bar does not cover bottom sheets or delete confirmation pages',
+        'Nav tab opacity fades smoothly when hub opens (same timeline as hub spring animation, no sudden drop)',
+        'Sort sheets (Sessions) open near the sort button, not at top of page',
+      ]},
+      {title:'TOASTS AND CONFIRMATIONS', items:[
+        '"Brew updated" toast shows after saving Edit brew',
+        'Equipment save toast shows after saving new or edited equipment',
+        'Settings toasts show correctly (reset, changes saved)',
+        'Delete confirmation sheets appear correctly on: Brew Detail, Equipment Detail, Recipe Detail',
+        'No toast or confirmation missing from any save/delete action',
+      ]},
+    ]
+  }
+
 ];
 
-let currentVersion = 'v0.6.4';
+let currentVersion = 'v0.7.9';
 let filter = 'all';
 let results = {};
 let saveTimer = null;
