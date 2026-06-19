@@ -5,7 +5,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA v0.7.9</title>
+<title>Dial QA v0.8.8</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -1044,9 +1044,246 @@ const VERSIONS = [
     ]
   }
 
+,
+  {
+    id: 'v0.8.0',
+    label: 'v0.8.0',
+    sections: [
+      {title:'RATING FLOW — SCORE MODEL', items:[
+        'Score bands correct: Redial 0.0–4.0 / Dialing 2.0–9.0 / Dialed 6.0–10.0 (bands overlap intentionally)',
+        'Dialed brew: score cannot go below 6.0',
+        'Dialing brew: score stays between 2.0 and 9.0',
+        'Redial brew: score stays 0.0–4.0',
+        'Sliders drive the score within the chosen band (moving a slider changes the number)',
+        'Chips only seed slider starting positions — changing chips after sliders are set does not reset sliders',
+        'Changing decision does NOT re-seed sliders',
+        'Step 3 slider touch targets: 44px tall — no mis-taps on adjacent sliders when tapping between them',
+      ]},
+      {title:'RATING FLOW — RE-RATING', items:[
+        'Re-rating from Brew Detail kebab "Edit rating": Step 1 pre-filled with existing decision',
+        'Re-rating: Step 2 pre-filled with chips from existing session',
+        'Re-rating: Step 3 sliders pre-filled from existing session',
+        'Re-rating: Step 4 intent text pre-filled from existing session (not overwritten unless blank)',
+        'Back from Step 2 in re-rating: returns to Step 1 with chip state preserved (not reset)',
+        'Step 1 in edit-rating mode: back button visible, navigates to Brew Detail (not Sessions History)',
+        'Step 4 (Lock It) in both new-brew and re-rating: back button visible',
+        'After completing re-rating: Brew Detail back button goes to Sessions History (not back into rating flow)',
+      ]},
+      {title:'RATING FLOW — ANIMATION', items:[
+        'Chip shuffle animation: slow bounce-in (not instant snap)',
+        'Decision-chip pill visible on Step 2 — tap it to re-open decision sheet without losing chips',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.1',
+    label: 'v0.8.1',
+    sections: [
+      {title:'LIVE BREW — CORRECTION STEPPER', items:[
+        'Correction stepper opens at the planned cumulative scale weight for that pour (not 0g)',
+        'Correction stepper shows what the scale should read after this pour (not the individual add amount)',
+        'Correcting pour 1: pour 2 and pour 3 cards still show their planned amounts (not affected by correction)',
+        'Correcting pour 2: pour 3 card still shows its planned amount',
+        'Target label in stepper shows the planned cumulative scale reading',
+      ]},
+      {title:'POUR EDITOR PAGE', items:[
+        'ml / % toggle present in the total-water card',
+        '% mode: pour amounts displayed as percentages of total water (not ml)',
+        '% mode: editing a percentage updates the ml amount correctly on save',
+        '"Split equally" button distributes total water evenly across all pours',
+        '"Split remaining" button distributes remaining water across unfilled pours only',
+        '"Split remaining" visually disabled (dimmed) when all pours already have amounts',
+      ]},
+      {title:'EDIT BREW — POUR DURATION', items:[
+        'Pour overlay: each pour shows a Duration field below the At and Amount fields',
+        'Duration field shows m:ss format when set; blank with placeholder when not set',
+        'Editing duration saves completedAt = startedAt + duration for that pour',
+        'Editing duration does NOT shift any other pour startedAt',
+        'Editing startedAt clears the duration field (completedAt guard active)',
+        'Clearing duration field removes completedAt from that pour',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.2',
+    label: 'v0.8.2',
+    sections: [
+      {title:'NAV LAYERING — OVERLAYS ABOVE NAV', items:[
+        'EditBrewPage: bean/recipe/grinder picker sheets render above the nav bar (not behind it)',
+        'EditBrewPage: pour edit overlay renders above the nav bar',
+        'EditBrewPage: discard confirmation sheet renders above the nav bar',
+        'BrewDetailPage: kebab action sheet renders above the nav bar',
+        'BrewDetailPage: delete confirmation sheet renders above the nav bar',
+        'RecipeDetailPage: archive confirmation sheet renders above the nav bar',
+        '"Keep editing" button in discard dialog fully visible (not obscured by nav)',
+      ]},
+      {title:'CREATION HUB POLISH', items:[
+        '+ button spins to × slowly when hub opens (not a fast snap)',
+        'Nav tab icons fade gradually as hub springs open (no sudden opacity drop)',
+        'Hub drag handle: dragging downward past threshold → hub dismisses',
+        'Hub drag handle: short drag (below threshold) → hub snaps back without dismissing',
+        'Hub: tapping the dark overlay still closes the hub',
+      ]},
+      {title:'EDIT BREW — CANCEL / DISCARD TOAST', items:[
+        'Cancel with unsaved changes → "Discard changes?" confirmation dialog appears',
+        'Confirming discard → "Changes discarded" toast shown → navigate back',
+        'Back button with unsaved changes → same dialog and same toast',
+        'Cancel with no changes → navigates back silently (no dialog, no toast)',
+        'Back button with no changes → navigates back silently',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.3',
+    label: 'v0.8.3',
+    sections: [
+      {title:'EQUIPMENT TOASTS', items:[
+        'Saving a new grinder: "Grinder saved" toast shown',
+        'Saving a new brewer: "Brewer saved" toast shown',
+        'Saving a new machine: "Machine saved" toast shown',
+        'Editing a grinder: "Grinder updated" toast shown',
+        'Editing a brewer: "Brewer updated" toast shown',
+        'Editing a machine: "Machine updated" toast shown',
+      ]},
+      {title:'SETTINGS TOASTS', items:[
+        'Entering demo mode: "Demo mode on" toast shown',
+        'Exiting demo mode: "Demo mode off" toast shown',
+        'Resetting demo data: "Demo data reset" toast shown',
+      ]},
+      {title:'MACHINE CARD', items:[
+        'Machine card shows correct count when a machine exists (even if only Name field was filled)',
+        'Machine card shows "Add" CTA only when no machine has been saved at all',
+      ]},
+      {title:'DEMO MODE BUTTON STYLING', items:[
+        'Enter demo mode confirmation buttons: rounded corners (not square)',
+        'Exit demo mode confirmation buttons: rounded corners',
+        'Reset demo data confirmation buttons: rounded corners',
+        'Demo mode buttons use current Lifted Indigo colours (not legacy token names)',
+      ]},
+      {title:'RE-RATING HEADER', items:[
+        'Re-rating from Brew Detail: Step 1 header shows the actual brew\'s recipe name or method (not demo label)',
+        'Re-rating: Step 2 header shows the actual brew\'s recipe name or method',
+        'Step 3 subtext reads "Set your score — seeded from your chips" (not "Derived from your chips")',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.4',
+    label: 'v0.8.4',
+    sections: [
+      {title:'DISPLAY FORMATTING', items:[
+        'Ratio displays to 2 decimal places everywhere (e.g. 1:15.87, not 1:15.9)',
+        'Ratio correct in Brew Detail, Recipe Detail, and Settings',
+        'Pour timestamps in Brew Detail show whole seconds (e.g. 1:22, not 1:22.806)',
+        'All event/pour time values in Brew Detail are whole seconds',
+        'L2 track page: visible gap between the back button row and the colour accent line below it',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.5',
+    label: 'v0.8.5',
+    sections: [
+      {title:'BEAN INVENTORY — EDIT BREW', items:[
+        'Edit brew, change dose from X to Y: bean bag remaining weight adjusts by (X − Y)g',
+        'Edit brew, increase dose: bean bag remaining weight decreases by the difference',
+        'Edit brew, decrease dose: bean bag remaining weight increases by the difference',
+        'Edit brew, change bean: old bean\'s remaining weight restored by original dose, new bean reduced by new dose',
+        'Edit brew, change both bean and dose: both inventory adjustments fire correctly',
+        'Bean Detail inventory ring reflects updated remaining weight after editing a brew',
+      ]},
+      {title:'RECIPE STATS — EDIT BREW', items:[
+        'Edit brew, change recipe: old recipe\'s totalBrews decreases by 1, new recipe\'s totalBrews increases by 1',
+        'Edit brew, change recipe: old recipe\'s avgScore updates (brew removed from average)',
+        'Edit brew, change recipe: new recipe\'s avgScore updates (brew added to average)',
+        'Edit brew, change recipe: Recipe Detail lastBrewed date is correct for both old and new recipe',
+        'Recipe Detail stats (totalBrews, avgScore, lastBrewed) reflect changes immediately after editing',
+      ]},
+      {title:'RECIPE STATS — RE-RATING', items:[
+        'Re-rating a brew: recipe avgScore updates to reflect the new score',
+        'Re-rating a brew: Recipe Detail shows updated avgScore immediately after saving',
+      ]},
+      {title:'DEFENSIVE ROBUSTNESS', items:[
+        'Re-rating a brew with old chip IDs (taxonomy changed): no crash or blank screen — unknown chips silently dropped',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.6',
+    label: 'v0.8.6',
+    sections: [
+      {title:'PER-POUR ACTUAL AMOUNTS', items:[
+        'Brew with pour corrections made: actual amounts stored separately from planned amounts',
+        'Brew without corrections: no actualVolume stored (undefined), planned volume used as-is',
+        '"Save as recipe" from Brew Detail (brew with corrections): pour amounts in RecipeFormPage show actual amounts',
+        '"Save as recipe" from Brew Detail (brew without corrections): pour amounts show planned amounts',
+        '"Create recipe" from kebab on a corrected brew: same actual-first prefill behaviour',
+        'RecipeFormPage total water and pour breakdown are consistent (actual amounts sum correctly)',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.7',
+    label: 'v0.8.7',
+    sections: [
+      {title:'LEGACY ROUTES RETIRED', items:[
+        'Navigating to /log/bean shows nothing or a clean 404 redirect (not a broken page)',
+        'Navigating to /log/grinder shows nothing or a clean 404 redirect',
+        'Navigating to /log/setup shows nothing or a clean 404 redirect',
+        'Navigating to /log/select shows nothing or a clean 404 redirect',
+        'Navigating to /log/brew shows nothing or a clean 404 redirect',
+        'Navigating to /log/taste shows nothing or a clean 404 redirect',
+        'Navigating to /history (if retired): shows nothing or clean redirect',
+        'Navigating to /feedback/any-id: shows nothing or clean redirect',
+        'No console errors on app load related to missing components or routes',
+      ]},
+      {title:'APP INTEGRITY — POST RETIREMENT', items:[
+        'All active tabs (Home, Coffees, Sessions, Dial, Learning) load correctly',
+        'Sessions History and Brew Detail load correctly',
+        'New brew flow (from Home → NLP entry → Full Setup → Live Brew → Rating) works end to end',
+        'Equipment screens (add, edit, detail) work correctly',
+        'Settings sheet opens and all sections visible',
+        'App version shows v0.8.7',
+        'No unexpected blank screens anywhere in the active flow',
+      ]},
+    ]
+  }
+,
+  {
+    id: 'v0.8.8',
+    label: 'v0.8.8',
+    sections: [
+      {title:'Z-INDEX REGRESSION CHECK', items:[
+        'EditBrewPage bottom sheets still render above nav bar (not behind it)',
+        'BrewDetailPage kebab and delete sheets still render above nav bar',
+        'Toast still renders on top of all overlays and nav',
+        'Hub overlay and hub sheet still layer correctly above nav',
+        'No visual change to any layering from the z-index token rename',
+      ]},
+      {title:'SCRIM FADE WITH DRAG', items:[
+        'Hub drag: scrim opacity fades as finger drags downward (not locked at full opacity until release)',
+        'Hub drag: scrim returns to full opacity when drag snaps back',
+        'Settings sheet drag: scrim opacity fades as finger drags downward',
+        'Settings sheet drag: scrim returns to full opacity when drag snaps back',
+        'Both dismissals still work correctly after the scrim fade change',
+      ]},
+      {title:'PACKAGE.JSON', items:[
+        'Build log shows webapp@0.8.8 (not webapp@0.4.0)',
+      ]},
+    ]
+  }
+
+ 
 ];
 
-let currentVersion = 'v0.7.9';
+let currentVersion = 'v0.8.8';
 let filter = 'all';
 let results = {};
 let saveTimer = null;
