@@ -5,7 +5,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA v0.9.5</title>
+<title>Dial QA v0.9.10b</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -1446,9 +1446,201 @@ const VERSIONS = [
     ]
   }
  
+,
+  {
+    id: 'v0.9.10',
+    label: 'v0.9.10',
+    sections: [
+
+      // ── v0.9.9: ActionMenu fix ───────────────────────────────────────────
+
+      {title:'ACTION MENUS — OPENING & CLOSING (v0.9.9)', items:[
+        'Brew Detail kebab button: tapping opens a small anchored popup (not a full sheet, not nothing)',
+        'Brew Detail kebab popup: closes on outside tap',
+        'Recipe Detail kebab: opens popup on tap',
+        'Grinder kebab: opens popup on tap',
+        'Brewer kebab: opens popup on tap',
+        'Machine kebab: opens popup on tap',
+        'Bean long-press on Coffees page: popup appears (no page freeze)',
+        'Bean long-press popup: closes on outside tap',
+        'All action menus render above the nav bar',
+      ]},
+
+      {title:'ACTION MENUS — ITEMS FIRE (v0.9.9)', items:[
+        'Brew Detail kebab → Edit brew: navigates to EditBrewPage',
+        'Brew Detail kebab → Edit rating: opens rating flow for re-rating',
+        'Brew Detail kebab → Create recipe: navigates to RecipeFormPage with brew prefilled',
+        'Brew Detail kebab → Delete: opens ConfirmDialog (destructive/red)',
+        'Recipe Detail kebab → Edit: navigates to recipe edit form',
+        'Recipe Detail kebab → Archive: opens ConfirmDialog (destructive/red)',
+        'Grinder kebab items fire correctly (edit / delete / set primary)',
+        'Brewer kebab items fire correctly',
+        'Machine kebab items fire correctly',
+        'Bean long-press → Log a Brew: opens brew flow with bean pre-selected',
+        'Bean long-press → Edit / Archive / Restore: each fires correctly',
+      ]},
+
+      {title:'KEBAB-GATED ACTIONS — DATA INTEGRITY (v0.9.9)', items:[
+        'Delete brew: ConfirmDialog confirm → session removed from Sessions History',
+        'Delete brew: bean inventory increases by the brew dose (remainingG restored)',
+        'Delete brew: recipe totalBrews decreases by 1',
+        'Delete brew: recipe avgScore recalculates without the deleted brew',
+        'Delete brew with no recipe: no crash, stats otherwise unaffected',
+        'Archive recipe: recipe no longer appears in active recipe list',
+        'Delete equipment: item removed from equipment list',
+        'Discard brew edits (EditBrewPage): ConfirmDialog appears; cancel keeps edits; confirm discards',
+      ]},
+
+      // ── v0.9.9: BeanDetailPage layout ────────────────────────────────────
+
+      {title:'BEAN DETAIL PAGE LAYOUT (v0.9.9)', items:[
+        'BeanDetailPage: back button is NOT overlapping any page content',
+        'BeanDetailPage: all content visible; nothing hidden behind the back button on load',
+        'BeanDetailPage: back button navigates to Coffees page correctly',
+        'Edit bean (via kebab → Edit): AddCoffeeFlow opens with no back button overlap',
+      ]},
+
+      // ── v0.9.6 items — first device verify ───────────────────────────────
+
+      {title:'DEMO MODE TOASTS (v0.9.6 — first device verify)', items:[
+        'Entering demo mode: "Demo mode on" toast appears',
+        'Exiting demo mode: "Demo mode off" toast appears',
+        'Entering and exiting multiple times: toast appears each time (no silent fails)',
+      ]},
+
+      {title:'SETTINGS SHEET DISMISS (v0.9.6 — first device verify)', items:[
+        'Settings sheet: requires a longer drag before dismissing (~160px, roughly half the screen height)',
+        'Settings scrim: still mostly opaque at the halfway point of the drag',
+        'Settings scrim: fades gradually across the full drag stroke',
+        'Settings dismiss: no blur flash on home screen when sheet closes',
+        'Hub × button: sheet does not cover the × button; clearance is visible above the hub sheet edge',
+      ]},
+
+      {title:'PREVIOUS BAGS BRANDING (v0.9.6 — first device verify)', items:[
+        'Previous bags section: no box / card background — rows are flat',
+        'Previous bags rows read similarly to session history rows in style',
+        'Previous bags: bean name, remaining weight, and actions still visible and correct',
+      ]},
+
+      // ── v0.9.7 items — first device verify ───────────────────────────────
+
+      {title:'HUB TAB ICON FADE (v0.9.7 — first device verify)', items:[
+        'Hub open: tab icons fade out gradually as the hub springs into position (no sudden opacity drop)',
+        'Hub close: tab icons fade back in gradually (symmetric with open fade)',
+        'Hub spring animation itself is unchanged',
+      ]},
+
+      {title:'BAG STOCK — INLINE EDIT (v0.9.7 — first device verify)', items:[
+        'BeanDetailPage stock section: the number between − and + is tappable and editable',
+        'Tapping the stock number: selects it for typing',
+        'Typing a new value and blurring/pressing Enter: ConfirmDialog appears ("Update stock?")',
+        'ConfirmDialog confirm: stock updates to the typed value',
+        'ConfirmDialog cancel: stock reverts to previous value',
+        '−5g and +5g stepper buttons: fire immediately without any ConfirmDialog',
+        'Stepper buttons still clamp correctly (no negative stock)',
+        'Old separate text input + "Set" button: no longer present',
+      ]},
+
+      {title:'BEAN WEIGHT PRECISION (v0.9.7 — first device verify)', items:[
+        'BeanDetailPage: remaining weight shows 2 decimal places (e.g. 246.51g not 246g)',
+        'Coffees page grid ring: remaining weight shows 1 decimal place (e.g. 246.5g)',
+      ]},
+
+      {title:'COFFEES PAGE SORT (v0.9.7 — first device verify)', items:[
+        'CoffeesPage sort popup: shows 3 sort key options (Name · Date Added · Remaining Weight) with a direction toggle',
+        'CoffeesPage sort popup: does NOT show 6 separate A→Z / Z→A entries',
+        'Name sort: A→Z and Z→A both work correctly',
+        'Date Added sort: newest and oldest both work correctly',
+        'Remaining Weight sort: works correctly',
+        'Sort direction toggle: flips between Asc and Desc',
+        'Sort selection persists after leaving and returning to Coffees page',
+      ]},
+
+      {title:'SESSIONS HISTORY METHOD FILTER (v0.9.7 — first device verify)', items:[
+        '"Method" is no longer a sort option in the Sessions History sort popup',
+        'A filter button (funnel icon) appears near the sort button in Sessions History',
+        'Filter popup: shows "All methods" plus the distinct methods present in your brews',
+        'Selecting a method: list shows only brews of that method',
+        '"All methods": clears the filter and shows all brews',
+        'Filter and sort work independently (filter applies first, sort applies to filtered result)',
+        'Filter selection persists after leaving and returning to Sessions History',
+      ]},
+
+      {title:'POUR EDITOR — DUAL UNITS (v0.9.7 — first device verify)', items:[
+        'Pour sequence: each pour row shows both ml and % simultaneously (e.g. "100ml · 40%")',
+        'ml/% toggle: still changes which unit is the editable input',
+        'The non-active unit shows read-only alongside the editable input',
+        'Pour totals and calculations are unaffected',
+      ]},
+
+      // ── v0.9.8 items — first device verify ───────────────────────────────
+
+      {title:'RATING FLOW POLISH (v0.9.8 — first device verify)', items:[
+        'Step 2 shuffle button: shows "Shuffle" text label alongside the icon',
+        'Shuffle button: still reshuffles chips on tap',
+        '"Rate later" (Step 1): tappable area is at least 44px tall',
+        '"Keep, don\'t count" (Step 1): tappable area is at least 44px tall',
+        '"Skip descriptions" (Step 2): tappable area is at least 44px tall',
+        '"Skip sliders" / "Change →" (Step 3): tappable area is at least 44px tall',
+      ]},
+
+      // ── v0.9.10: sticky headers ───────────────────────────────────────────
+
+      {title:'STICKY HEADERS — SCROLL BEHAVIOUR (v0.9.10)', items:[
+        'Home page: DIAL logo + settings button stay fixed at the top while page content scrolls',
+        'Coffees page: title and sort/filter controls stay fixed while bean list scrolls',
+        'BeanDetailPage: page title / breadcrumb stays fixed while content scrolls',
+        'Sessions History: title + sort and filter buttons stay fixed while session list scrolls',
+        'Brew Detail page: header stays fixed while brew content scrolls',
+        'Recipe Detail page: recipe name header stays fixed',
+        'Dial page: title stays fixed',
+        'Learning page (LearningGrid): title stays fixed',
+      ]},
+
+      {title:'STICKY HEADERS — VISUAL (v0.9.10)', items:[
+        'All sticky headers: background is fully solid (no content visible through header)',
+        'All sticky headers: background colour matches the page background (not a different surface)',
+        'No box shadow or border on sticky headers (flat, consistent with design)',
+        'Content does not start hidden behind the sticky header on page load',
+        'Mascot stays in page content, not moved into any header',
+      ]},
+
+      {title:'STICKY HEADERS — LAYERING (v0.9.10)', items:[
+        'ActionMenu (kebab popup) appears above the sticky header when triggered',
+        'ConfirmDialog appears above the sticky header',
+        'Toast appears above the sticky header',
+        'Sticky header does NOT appear above a portalled overlay or modal',
+      ]},
+
+      {title:'STICKY HEADERS — BREW FLOW UNTOUCHED (v0.9.10)', items:[
+        'NLP entry page: header behaviour unchanged (brew flow, not AppShell)',
+        'Full Setup page: header behaviour unchanged',
+        'Live Brew page: header behaviour unchanged',
+        'Rating flow: header behaviour unchanged',
+        'Pour Editor page: header behaviour unchanged',
+      ]},
+
+      // ── Regression ────────────────────────────────────────────────────────
+
+      {title:'REGRESSION — CORE FLOWS (v0.9.9–v0.9.10)', items:[
+        'New brew end-to-end: NLP → Full Setup → Live Brew → Rating (Dialed) → Brew Detail',
+        'New brew end-to-end: Rate Later → lands on Brew Detail → CTA button visible → rate from CTA',
+        'Re-rating: kebab → Edit rating → change score → Lock It → score updated in detail and history',
+        'Edit brew: kebab → Edit brew → save changes → stats recompute correctly',
+        'Delete brew: kebab → Delete → confirm → session gone, inventory and recipe stats updated',
+        'Equipment: add grinder → kebab → edit → kebab → delete (confirm) → gone',
+        'Demo mode: enter → demo data visible → exit → real data restored, no loss',
+        'App version in Settings shows v0.9.10',
+        'Build is clean — no TypeScript errors',
+      ]},
+
+    ]
+  }
+
 ];
 
-let currentVersion = 'v0.9.5';
+
+let currentVersion = 'v0.9.10b';
 let filter = 'all';
 let results = {};
 let saveTimer = null;
