@@ -5,7 +5,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dial QA v0.9.10b</title>
+<title>Dial QA v0.9.20</title>
 <style>
   :root {
     --bg: #0f0e1a;
@@ -1637,10 +1637,366 @@ const VERSIONS = [
     ]
   }
 
+,
+  {
+    id: 'v0.9.20',
+    label: 'v0.9.20',
+    sections: [
+
+      // ── v0.9.11 ─────────────────────────────────────────────────────────────
+
+      {title:'SESSIONS HISTORY — COMBINED CONTROLS (v0.9.11)', items:[
+        'Sessions History: a single "controls" icon button appears top-right (not separate Sort + Filter buttons)',
+        'Tapping the controls button opens one combined popover with a METHOD section and a SORT section',
+        'METHOD section: "All methods" option + one entry per method present in your brews',
+        'Selecting a method: list shows only brews of that method',
+        '"All methods": clears the filter and shows all brews',
+        'SORT section: Date and Score key options; each has a direction toggle (Newest–Oldest / Highest–Lowest)',
+        'Selecting Date key and Newest–Oldest: correct date-descending order',
+        'Selecting Score key and Highest–Lowest: correct score-descending order',
+        'Direction toggle: flips correctly between ascending and descending for both keys',
+        'Reset button: clears method and sort back to defaults (All methods / Date / Newest)',
+        'Amber dot appears on the controls button when any control differs from its default',
+        'Amber dot is absent when all controls are at their defaults',
+        'All selections apply to the visible list immediately — no staging, no Done button',
+        'Sort key and direction persist to localStorage: correct after leaving and returning',
+        'Method filter persists to localStorage: correct after leaving and returning',
+      ]},
+
+      // ── v0.9.12 / v0.9.12b ─────────────────────────────────────────────────
+
+      {title:'BACKGROUND & HEADER CONSISTENCY (v0.9.12/12b)', items:[
+        'Home page: sticky header background matches the page body (no colour seam when scrolling)',
+        'Sessions History: sticky header background matches body',
+        'Recipe Detail: sticky header background matches body',
+        'CoffeesPage: flat page background — no radial gradient visible',
+        'CoffeesPage: sticky header background matches the flat body (no lighter/darker stripe)',
+        'All AppShell pages: page body is a consistent deep indigo — no darker seam at the very top',
+        'Equipment detail back button: sits at the standard header-top position (not too close to the notch)',
+        'Equipment add/edit back button: at the same standard position; no overlap with form title',
+        'Equipment form: content starts well below the back button (no overlap on load)',
+        'BeanDetailPage status-bar strip (top overlay): matches the page background',
+      ]},
+
+      // ── v0.9.13 ─────────────────────────────────────────────────────────────
+
+      {title:'COFFEES PAGE — PREVIOUS BAGS SORT (v0.9.13)', items:[
+        'Previous Bags section has its own sort button, independent of the Active Bags sort control',
+        'Sort popup anchors near the previous bags sort button (mid-page, not top of screen)',
+        'Sort options: Name, Date Added, Date Finished — all present',
+        'Name sort A→Z and Z→A both work correctly for previous bags',
+        'Date Added sort works correctly for previous bags',
+        'Date Finished sort works correctly for previous bags',
+        'Previous bags sort persists after leaving and returning to Coffees page',
+        'Changing previous bags sort does NOT reorder active bags (independent)',
+        'Changing active bags sort does NOT reorder previous bags (independent)',
+      ]},
+
+      {title:'BEAN DETAIL BACK BUTTON (v0.9.13)', items:[
+        'BeanDetailPage: floating back button is frosted/semi-transparent, top-left, ~36×36px',
+        'Back button style matches Equipment Detail back button pattern',
+        'Back button does not cover any hero content, arc ring, or stats on page load',
+        'Tapping back returns to Coffees page',
+      ]},
+
+      {title:'BREW DETAIL — ACTUAL POUR VOLUMES (v0.9.13)', items:[
+        'Brew where corrections were made: pour rows show "Xg → Yg" (planned → actual)',
+        'Brew without corrections: pour rows show only a single volume (no arrow suffix)',
+        '"Xg → Yg" shows the planned amount first, then the corrected actual amount',
+      ]},
+
+      {title:'LIVE TIMER FORMAT (v0.9.13)', items:[
+        'Live brew timer format is M:SS (e.g. "3:05") — NOT zero-padded MM:SS (e.g. "03:05")',
+        'Timer format correct from the very start (0:00 not 00:00)',
+      ]},
+
+      // ── v0.9.14 / v0.9.14b / v0.9.14c ─────────────────────────────────────
+
+      {title:'NLP BREW ENTRY — TYPED TEXT (v0.9.14)', items:[
+        'Tapping [+] → New Brew → NLP entry page with text area and suggestion chips',
+        'Tapping a suggestion chip: populates the text area with that text',
+        '"Set up manually →" link: navigates directly to Full Setup (skips NLP)',
+        'Typing a brew description and submitting → loading screen appears for ~1.1s minimum',
+        'Loading → Quick Confirm page showing parsed method, dose, water, ratio fields',
+        'Quick Confirm: bean, grinder, pour count, temperature rows show parsed values',
+        'Quick Confirm: unparsed fields show "Not set" or "—" (not blank, not crashes)',
+        'Quick Confirm: "Set up manually →" link also present on confirm page',
+        'Offline / function unavailable: notice appears that parsing used offline mode; flow continues',
+        'Edit button on Quick Confirm → Full Setup with amber-tinted extracted fields',
+        'Amber tint in Full Setup: only fields that were actually extracted from text (not all fields)',
+        'Start Brewing on Quick Confirm → Live Brew with the correct pour count and amounts',
+        'Espresso phrasing ("18g in, 36g out"): Quick Confirm shows dose 18g, yield 36g',
+        'Bean pre-selected entry (from Coffees long-press): bean pre-filled in Quick Confirm',
+      ]},
+
+      {title:'NLP BREW ENTRY — BACK NAVIGATION (v0.9.14c)', items:[
+        'Back from Quick Confirm → NLP entry; typed text is RESTORED in the text area',
+        'Back from NLP entry → returns to the screen the brew was launched from (Home, Bean Detail, etc.)',
+        'Back from Quick Confirm and then back from NLP: no navigation loop (reaches original entry point)',
+        'Pressing back twice from Quick Confirm → back → back: does not re-enter Quick Confirm',
+      ]},
+
+      // ── v0.9.15 ─────────────────────────────────────────────────────────────
+
+      {title:'NLP BREW ENTRY — VOICE (v0.9.15)', items:[
+        'Mic button on NLP entry: tapping enters real recording state (waveform bars animate, "Listening…" label)',
+        '"Tap to stop" label/control visible in recording state',
+        'Speaking: interim transcript streams live in the transcription card area',
+        'Stopping recording: final transcript is committed into the text area',
+        'Tapping mic a second time: appends to existing text (additive; does not wipe previous text)',
+        'Non-HTTPS context (plain LAN HTTP over an IP address): mic button dimmed at ~40% opacity',
+        'Non-HTTPS: tapping mic shows a helpful error message; text path fully works',
+        'Microphone permission denied: friendly error message appears; text path works',
+        'Unsupported browser (Firefox / old Safari): mic button dimmed; text path works',
+        'Submit after voice capture goes through the same parse pipeline as typed text',
+      ]},
+
+      // ── v0.9.15.1 / v0.9.15.1b / v0.9.15.1c ────────────────────────────────
+
+      {title:'POUR TIMING — RECIPE FORM & DETAIL (v0.9.15.1/1c)', items:[
+        'Recipe Form (filter only): "Target brew time" m:ss field is visible and tappable',
+        'Target brew time input: comfortably sized (not tiny), accepts "3:30" format',
+        'Saving recipe with a target time: value persists to the recipe',
+        'Recipe Detail (filter): "Target brew time" row shows the saved value (e.g. "3:30")',
+        'Recipe Detail: "Target brew time" absent for espresso recipes',
+        'Recipe Form pour editor: "Start at" column present in the pour table header row',
+        'Recipe Form: setting Pour 2 at 0:45 and leaving Pour 1 + 3 blank — saves correctly',
+        'Recipe Detail pour card for Pour 2: "0:45" visible; Pour 1 + 3 show no start time',
+        'Brew Now from recipe with per-pour times: Full Setup receives those times',
+      ]},
+
+      {title:'POUR TIMING — BREW SETUP POUR EDITOR (v0.9.15.1c)', items:[
+        'Brew Setup pour editor: collapsed pour row shows "· @m:ss" when a start time is set',
+        'Brew Setup pour editor: start time set on Pour 2 survives tapping Done (NOT discarded)',
+        'After Done from pour editor: time visible on collapsed row in Full Setup',
+        'Full Setup → Start Brew: per-pour times carry through to the Live Brew timeline',
+      ]},
+
+      {title:'LIVE BREW — TARGET TIME (v0.9.15.1)', items:[
+        'Full Setup (filter): "Target brew time" m:ss field visible above Notes',
+        'Placeholder in target time field shows the selected recipe\'s target time',
+        'Entering a custom target time overrides the recipe\'s target for this brew',
+        'Live Brew timeline scale reflects the entered target time (not a fixed 240s default)',
+      ]},
+
+      {title:'LIVE BREW — DATA CORRECTNESS (v0.9.15.1)', items:[
+        'Brew Detail pour windows: Pour 1 shows its real stop time (e.g. "0:00–0:14")',
+        'Gap between pours: NOT absorbed into the previous pour\'s duration',
+        'Pour 2 start correctly shown as its own start (e.g. "0:45–…"), not 0:14',
+        'Final pour: inline adjuster appears BEFORE the "End Brew & Rate" CTA (not skipped)',
+        'Final pour adjuster sub-copy reads "Adjust, then End Brew" (not "Closes when next pour starts")',
+        'Correction input: accepts decimal values (e.g. type "121.6" — accepted, not truncated to 121)',
+      ]},
+
+      // ── v0.9.15.2 ────────────────────────────────────────────────────────────
+
+      {title:'LIVE BREW — CARD LAYOUT (v0.9.15.2)', items:[
+        'Active pour card: large "Total on scale" hero number (cumulative scale weight, Bebas Neue)',
+        '"Total on scale" micro-label appears above the hero number',
+        'Active card: water-fill animation rises up through the number in real time',
+        '"To-add" amber pill below the total: shows the individual pour amount to add (e.g. "+ pour 100g")',
+        'Amber pill dims on non-active (upcoming/done) cards',
+        'Mascot stays in a fixed position across all brew states (idle, pouring, gap/adjusting)',
+        'Brew clock stays in a fixed position across all brew states',
+        '+Event button stays in a fixed position in the utility row across all brew states',
+        'CTAs stay anchored at the bottom across all brew states (no layout jumps)',
+        'Pour adjuster appears inline ON the card itself — not in a separate panel below the carousel',
+        'Inline adjuster: amber card border visible when adjusting',
+        'Inline adjuster: ± round buttons present for adjusting the volume',
+        '"Target Ng" hint text visible in the adjuster (muted, not gold-coloured "g")',
+        '"Adjust, then End Brew" sub-copy on the final-pour inline adjuster',
+        'Done cards: "took X:XX · start–stop" look-back text visible',
+        'Active card: "This pour X:XX" amber chip shows elapsed time for the current pour',
+        'Upcoming cards: "due X:XX" in muted text when scheduled time has not passed',
+        'Upcoming cards: "overdue X:XX" in terracotta when elapsed > the pour\'s planned start time',
+      ]},
+
+      {title:'LIVE BREW — GUIDANCE & TIMELINE (v0.9.15.2)', items:[
+        'Guidance pill visible under the brew clock in every state',
+        'Guidance pill: violet background + "On schedule · Pour N" when on time',
+        'Guidance pill: turns terracotta background + pulses when next pour is overdue',
+        'Guidance pill text: "Pour N · Xs late — start when ready" when overdue',
+        'Timeline bar: taller than a thin line; tick labels below each pour marker (e.g. "P1", "P2 0:45")',
+        'Timeline tick for the upcoming pour: turns amber when that pour is overdue',
+        'Timeline playhead: lavender vertical bar at current elapsed position',
+        'Playhead turns terracotta when next pour is overdue',
+        'Main CTA button: turns terracotta background when next pour is overdue',
+        'Next-up info strip: shows "Next · Pour N · +Xg" for upcoming pours',
+        'Next-up info strip: shows "Pour N is due" in terracotta when overdue',
+        'Next-up info strip: shows "Last pour · drain when ready" on the final pour',
+        'Final pour done: main CTA becomes gold "End Brew & Rate"',
+        '+Event button opens a popover above the utility row',
+        'Tapping outside the popover or switching state: popover closes',
+      ]},
+
+      // ── v0.9.15.3 ────────────────────────────────────────────────────────────
+
+      {title:'LIVE BREW — AD-HOC EVENTS (v0.9.15.3)', items:[
+        '+Event popover: Swirl, Stir, Switch open, Switch close, Wait — all five buttons present and tappable',
+        'Tapping a named event: popover closes, event logged with the current elapsed timestamp',
+        '"Other…" button in popover: tapping reveals an amber text input and "Log" button',
+        'Typing a custom event label and tapping Log: event logged with note; popover closes',
+        'Enter key in "Other…" input also logs the event',
+        'Events appear in Brew Detail at correct timestamps and with correct event types',
+        'Kebab (⋮) header button → "Add event": opens the same event popover',
+        'Event types in recipe form event editor: Swirl / Stir / Switch open / Switch close / Wait / Other',
+        'French Press default event in recipe form: "Stir" (not "Plunge" or "Flip")',
+        'AeroPress default event in recipe form: "Stir"',
+      ]},
+
+      {title:'LIVE BREW — REMOVE A POUR (v0.9.15.3)', items:[
+        'Kebab (⋮) → "Remove a pour…" visible after brew starts (when ≥2 pours remain)',
+        'Tapping "Remove a pour…": opens a bottom-sheet chooser',
+        'Chooser: already-poured pours show a muted "Poured" label (no remove button)',
+        'Chooser: the currently active pour shows a muted "Active" label (no remove button)',
+        'Chooser: upcoming pours show a terracotta ✕ circle button',
+        'Tapping ✕ on an upcoming pour: pour removed from the plan',
+        'After removal: remaining pour totals recompute correctly',
+        'Brew continues correctly after removing a pour',
+        '"End Brew & Rate" CTA still works after removing a pour',
+      ]},
+
+      // ── v0.9.15.4 ────────────────────────────────────────────────────────────
+
+      {title:'RATING FLOW — RATE LATER (v0.9.15.4)', items:[
+        'Step 1 ("How did it go?"): "Rate later — saved for 48h" is a clearly visible, full-width outlined button',
+        '"Rate later — saved for 48h" button height is at least 44px and comfortably tappable',
+        '"Rate later — saved for 48h" is NOT a faint ghost — it is clearly readable',
+        '"Keep, don\'t count" remains a quieter ghost below it (less prominent)',
+        'Tapping "Rate later — saved for 48h": saves brew as awaiting, navigates to Brew Detail',
+        'Brew Detail after rate-later: "Awaiting rating" CTA still visible (can rate from there)',
+      ]},
+
+      {title:'HOME INDICATOR BACKGROUND (v0.9.15.4)', items:[
+        'iPhone: no dead-black strip below content at the home indicator zone on the Home tab',
+        'iPhone: no dead-black strip on Sessions, Coffees, Learning tabs',
+        'iPhone: no dead-black strip during Live Brew',
+        'Home indicator zone background blends seamlessly with page background on all screens',
+      ]},
+
+      // ── v0.9.16 ──────────────────────────────────────────────────────────────
+
+      {title:'AI INSIGHTS WIDGET (v0.9.16)', items:[
+        'Home "Your brews" section: AI insight card shows "Tap for today\'s insight →" CTA when ≥3 rated brews exist',
+        'Tapping the CTA: loading state appears, then a one-sentence coaching insight in Cormorant Garamond',
+        'Insight text: single sentence, relevant coffee coaching (not generic filler)',
+        'Same-day reload or re-tap: cached insight shows immediately (no new network call)',
+        '"Learn more in Theory →" footer link on insight card navigates to Learning',
+        'With <3 rated brews (or fresh data): encouraging placeholder shown, no API call',
+        'Function unavailable (no key / offline): "Couldn\'t generate…" message + retry button appear',
+        'Retry button: triggers a new fetch attempt',
+      ]},
+
+      // ── v0.9.17 ──────────────────────────────────────────────────────────────
+
+      {title:'SESSIONS INSIGHTS PAGE (v0.9.17)', items:[
+        'Sessions Overview: 4 cards in a horizontally-scrollable row (History · Recipes · Insights · Equipment)',
+        'At least the fourth card (Equipment) partially peeks from the right edge on a standard iPhone',
+        'Insights card is always tappable — no empty state, no zero count blocking it',
+        'Tapping Insights card: navigates to /sessions/insights',
+        'Insights page sticky header: title stays fixed while content scrolls',
+        'Back button on Insights page: returns to Sessions Overview',
+        'Range picker on Insights page: Week / Month / All Time / Custom all change the stats',
+        'Stat chips update on range change: Brews count, Avg Score, Avg Time (when available), Methods count',
+        'Rating Trend chart (30-day): always visible regardless of selected range',
+        'Brews per Week chart (8-week): always visible regardless of selected range',
+        'Taste fingerprint bars (Acidity / Sweetness / Bitterness / Body): visible when range has rated brews',
+        'Taste fingerprint hidden when the selected range has no brews',
+        'Top performers: top-3 beans, roasters, recipes, methods — each shows avg score and brew count',
+        'Top performers section hidden when the selected range has no brews',
+        'Gold rank #1 highlight visible on the top item in each top-performer list',
+        'Empty state: "No brews in this range" shown when range is empty; charts still render',
+        'Custom date range: sheet opens, pick From and To, Apply → stat chips update',
+      ]},
+
+      // ── v0.9.18 ──────────────────────────────────────────────────────────────
+
+      {title:'LEGACY TEARDOWN — ENTRY POINTS (v0.9.18)', items:[
+        '[+] → New Brew: lands on NLP entry page (not old bean-select flow)',
+        'Coffees → long-press a bean → Log a Brew: NLP entry opens with that bean pre-selected',
+        'Home Next Brew card: navigates to NLP entry (or Full Setup if recipe state present)',
+        'Recipe Detail "Brew Now": navigates to Full Setup with recipe pre-loaded (not old flow)',
+        'Navigating to /log/bean: no crash, nothing rendered (or clean redirect)',
+        'Navigating to /log/grinder: no crash, nothing rendered',
+        'Navigating to /log/setup: no crash, nothing rendered',
+        'Navigating to /log/select: no crash, nothing rendered',
+        'Navigating to /log/brew: no crash, nothing rendered',
+        'Navigating to /log/taste: no crash, nothing rendered',
+        'Logging nav strip (visible during active brew): no Dial tab present',
+        'No broken screens or unexpected navigations from any brew entry point',
+      ]},
+
+      // ── v0.9.19 ──────────────────────────────────────────────────────────────
+
+      {title:'PHOTO UPLOAD — EQUIPMENT (v0.9.19)', items:[
+        'Equipment Detail (no photo): "Add photo" dashed strip visible below the hero',
+        'Tapping "Add photo": file/camera picker opens',
+        'After picking an image: crop step appears with the image inside a crop frame',
+        'Crop hint text reads "Pinch to zoom · drag to reposition"',
+        'Pinch gesture: zooms the image within the frame',
+        'Drag gesture: repositions the image within the frame',
+        'Image edges cannot leave the frame — no blank space appears in the frame',
+        'Cancel button in crop: frosted pill style, clearly readable (not faint text)',
+        'Retake button in crop: frosted pill style, clearly readable',
+        '"Use Photo" / confirm: hero updates to show the cropped image',
+        'Photo persists after leaving and returning to Equipment Detail (or app reload)',
+        'Equipment Detail (photo set): "Change photo" frosted overlay button visible in hero bottom-right',
+        'Equipment Detail kebab (photo set): "Change photo" and "Remove photo" options present',
+        '"Remove photo" via kebab: hero reverts to SVG silhouette placeholder',
+      ]},
+
+      {title:'PHOTO UPLOAD — BEANS (v0.9.19)', items:[
+        'Bean Detail kebab: "Change photo" option always present',
+        'Bean Detail kebab: "Remove photo" option visible only when a photo is already set',
+        '"Change photo": opens the crop flow with interactive pinch-zoom + drag-to-reposition',
+        'Crop flow for beans: same gesture behaviour as equipment (edges clamped)',
+        'Photo saves to bean hero; persists after reload',
+        '"Remove photo": bean hero reverts to the gradient/silhouette background (no photo shown)',
+      ]},
+
+      // ── v0.9.20 ──────────────────────────────────────────────────────────────
+
+      {title:'SAVE AS YOUR USUAL (v0.9.20)', items:[
+        'Rating Step 4 (Lock It): "Save as your usual" button is visible when decision = Dialed',
+        '"Save as your usual" button is NOT visible for a Dialing decision',
+        '"Save as your usual" button is NOT visible for a Redial decision',
+        '"Save as your usual" button is NOT visible when re-rating an existing brew (edit rating mode)',
+        'Tapping the button: visual changes to "✓ Saved as your usual" in amber filled style',
+        'After tap: button cursor changes (becomes non-interactive); tapping again does nothing',
+        'Next new brew of the SAME method: Full Setup fields show amber-tinted prefill from usual',
+        'Amber fields from usual: dose, water, temp, grind — each where a usual value is stored',
+        'Amber from NLP extract takes priority over amber from usual (NLP field: amber from NLP, not usual)',
+        'Recipe-loaded value takes priority over usual (recipe field: amber from recipe, not usual)',
+        'Brewing a DIFFERENT method after saving usual: no amber prefill for the different method',
+        'Home Next Brew card: dose / water / grind params text populated from usual when no session or recipe provides them',
+        'Re-rating a brew: does NOT save or overwrite the usual (button not shown)',
+        'Usual persists across app reloads (stored in localStorage)',
+      ]},
+
+      // ── Regression ───────────────────────────────────────────────────────────
+
+      {title:'REGRESSION — CORE FLOWS (v0.9.11–v0.9.20)', items:[
+        'Full end-to-end typed NLP: [+] → New Brew → type brew sentence → Quick Confirm → Start Brewing → Live Brew → End Brew → Rate (Dialed) → Lock It → "Save as your usual" tapped → Brew Detail',
+        'Full end-to-end voice: [+] → New Brew → mic → speak brew details → stop → Submit → Quick Confirm → Start Brewing → rate → done',
+        'Same method next brew: Full Setup shows amber dose/water/temp/grind from usual',
+        'Log a Brew from Coffees long-press: NLP entry opens with bean pre-selected; flow completes end-to-end',
+        'Sessions → Insights: stat chips, range picker, charts, and top performers all working',
+        'Add photo to a grinder → Equipment Detail hero shows photo → persists on reload',
+        'Remove photo from a bean → hero reverts to silhouette',
+        'Sessions History combined controls: filter by method + sort by score → correct filtered + sorted list',
+        'Rate later path: finish brew → "Rate later — saved for 48h" clearly visible → tap → Brew Detail with awaiting CTA',
+        'Legacy routes /log/bean, /log/grinder etc: no crash, nothing rendered',
+        'App version in Settings shows v0.9.20',
+        'No broken screens, no console errors across all 5 tabs',
+      ]},
+
+    ]
+  }
+
 ];
 
 
-let currentVersion = 'v0.9.10b';
+let currentVersion = 'v0.9.20';
 let filter = 'all';
 let results = {};
 let saveTimer = null;
